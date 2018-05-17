@@ -1,15 +1,18 @@
 require "bundler/setup"
-require "support/file_system_matchers"
 require "support/file_system_helper"
 
+require "support/file_system_matchers"
 require "support/terminate_matchers"
 
 require "dotfiler"
 
+# Must be required after "dotfiler"
 require "support/cli_helper"
 
 SPEC_ROOT = File.dirname(__FILE__)
 TMP_DIR = (SPEC_ROOT + "/tmp").freeze
+
+require "support/test_path_helper"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -21,53 +24,53 @@ RSpec.configure do |config|
   # Use RSpec. explicitly
   config.expose_dsl_globally = false
 
+  # Use `expect` as expectation syntax
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
 
+  # Include file system helpers for easier creation of files, dirs & symlinks
   config.include FileSystemHelper
+
+  # Include test path helper for easier path specification
+  # Paths are prefixed with TMP_DIR path
+  config.include TestPathHelper
+
+  # cli helper requires necessary files
   config.include CLIHelper, type: :cli
 
   config.before(:each) do
+    # Set home dir to TMP_DIR
     allow(Dir).to receive(:home).and_return(TMP_DIR)
   end
 
   config.after(:each) do
+    # Recreate TMP_DIR after each spec
     system("rm", "-rf", TMP_DIR)
     system("mkdir", TMP_DIR)
   end
 
-  config.around(:example) do |ex|
+  config.around(:example) do |example|
+    # Prevent RSpec from terminating early because of `exit` statement
+    # `exit` is used in cli commands
     begin
-      ex.run
+      example.run
     rescue SystemExit => e
-      puts "Got SystemExit: #{e.inspect}. Ignoring"
+      puts "Got SystemExit: #{e.status}. Ignoring..."
     end
   end
 
-  def test_path(path = nil)
-    pathname = Pathname.new(TMP_DIR)
-
-    pathname.join(path).to_s
-  end
-
-
+  # Dotfiler setup convenience method
   def initial_setup
-    require "hanami/cli"
-    require "dotfiler/cli/commands/init"
-
     Dotfiler::CLI::Commands::Init.new(command_name: "init").call(path: test_path("dotfiles"))
   end
 
+  # Helper method for easier links appending
   def add_links(links)
     link_list = Dotfiler.resolve["links"]
 
     links.each do |item|
       link_list.append!(item[:tag], link: item[:link], path: item[:path])
     end
-  end
-
-  def config
-    Dotfiler.resolve["config"]
   end
 end
