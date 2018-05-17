@@ -33,7 +33,10 @@ RSpec.describe Dotfiler::CLI::Commands::Init, type: :cli do
 
     it "outputs error message" do
       expect(output).to receive(:error)
-      expect{ init.call(path: dotfiles_path, options: options) }.to raise_error(SystemExit)
+    end
+
+    it "exits with code 1" do
+      expect{ init.call(path: dotfiles_path, options: options) }.to terminate.with_code(1)
     end
   end
 

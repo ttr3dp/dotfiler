@@ -30,10 +30,14 @@ RSpec.describe Dotfiler::CLI::Commands::Link, type: :cli do
     let(:output) { Dotfiler::Output.new }
     let(:link) { described_class.new(command_name: "link", output: output) }
 
-    it "outputs error and exits" do
+    it "outputs error" do
       expect(output).to receive(:error).with("'foo' tag already exists")
 
-      expect{ link.call(tag: "foo", path: "") }.to raise_error(SystemExit)
+      link.call(tag: "foo", path: "")
+    end
+
+    it "exits with code 1" do
+      expect{ link.call(tag: "foo", path: "") }.to terminate.with_code(1)
     end
   end
 end

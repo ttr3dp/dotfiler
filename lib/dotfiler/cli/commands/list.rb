@@ -10,7 +10,7 @@ module Dotfiler
 
         def call(tags: nil)
           if links.list.empty?
-            output.print("  No dotfiles are managed at the moment")
+            output.info("No dotfiles are managed at the moment")
             exit(0)
           else
             content = generate_list(tags_only: !tags.nil?)

@@ -48,9 +48,13 @@ RSpec.describe Dotfiler::CLI::Commands::List, type: :cli do
     end
 
     it "outputs message" do
-      expect(output).to receive(:print).with("  No dotfiles are managed at the moment")
+      expect(output).to receive(:info).with("No dotfiles are managed at the moment")
 
       list.call
+    end
+
+    it "exits with code 0" do
+      expect{ list.call }.to terminate.with_code(0)
     end
   end
 end

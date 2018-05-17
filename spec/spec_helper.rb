@@ -2,6 +2,8 @@ require "bundler/setup"
 require "support/file_system_matchers"
 require "support/file_system_helper"
 
+require "support/terminate_matchers"
+
 require "dotfiler"
 
 require "support/cli_helper"
