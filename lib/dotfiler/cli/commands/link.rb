@@ -2,7 +2,7 @@ module Dotfiler
   module CLI
     module Commands
       class Link < Command
-        include Dotfiler::Import["config", "links", "symlinker", "mover", "output"]
+        include Dotfiler::Import["config", "links", "symlinker", "mover", "shell"]
 
         desc "Add specified file/dir to dotfiles"
 
@@ -23,7 +23,7 @@ module Dotfiler
         def validate_tag!(tag)
           return unless tag_exists?(tag)
 
-          output.error("'#{tag}' tag already exists")
+          shell.print("'#{tag}' tag already exists", :error)
           exit(1)
         end
 

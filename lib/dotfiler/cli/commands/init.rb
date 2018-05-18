@@ -2,7 +2,7 @@ module Dotfiler
   module CLI
     module Commands
       class Init < Command
-        include Dotfiler::Import[config: "config", output: "output", fs: "file_system"]
+        include Dotfiler::Import[config: "config", shell: "shell", fs: "file_system"]
 
         desc "Create initial configuration. Create dotfiles dir at specified path. Initialize git repo."
 
@@ -19,7 +19,7 @@ module Dotfiler
 
             initialize_vcs_repo(dotfiles_path) unless options[:git] == false
           rescue => e
-            output.error(e.message)
+            shell.print(e.message, :error)
             exit(1)
           end
         end
@@ -55,7 +55,7 @@ module Dotfiler
         end
 
         def info(message)
-          output.info(message)
+          shell.print(message, :info)
         end
       end
     end

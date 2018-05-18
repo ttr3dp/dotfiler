@@ -27,11 +27,11 @@ RSpec.describe Dotfiler::CLI::Commands::Link, type: :cli do
   end
 
   context "when tag already exists" do
-    let(:output) { Dotfiler::Output.new }
-    let(:link) { described_class.new(command_name: "link", output: output) }
+    let(:shell) { Dotfiler::Shell.new }
+    let(:link) { described_class.new(command_name: "link", shell: shell) }
 
     it "outputs error" do
-      expect(output).to receive(:error).with("'foo' tag already exists")
+      expect(shell).to receive(:print).with("'foo' tag already exists", :error)
 
       link.call(tag: "foo", path: "")
     end

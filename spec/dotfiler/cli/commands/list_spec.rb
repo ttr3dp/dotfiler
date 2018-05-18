@@ -2,8 +2,8 @@ require "spec_helper"
 
 RSpec.describe Dotfiler::CLI::Commands::List, type: :cli do
 
-  let(:output) { Dotfiler::Output.new }
-  let(:list) { described_class.new(command_name: "list", output: output) }
+  let(:shell) { Dotfiler::Shell.new }
+  let(:list) { described_class.new(command_name: "list", shell: shell) }
 
   before do
     initial_setup
@@ -29,7 +29,7 @@ RSpec.describe Dotfiler::CLI::Commands::List, type: :cli do
 
     EOF
 
-    expect(output).to receive(:print).with(expected_output)
+    expect(shell).to receive(:print).with(expected_output)
 
     list.call
   end
@@ -37,7 +37,7 @@ RSpec.describe Dotfiler::CLI::Commands::List, type: :cli do
   it "lists tags only" do
     expected_output = "  foo\n  bar\n  baz\n"
 
-    expect(output).to receive(:print).with(expected_output)
+    expect(shell).to receive(:print).with(expected_output)
 
     list.call(tags: "tags")
   end
@@ -48,7 +48,7 @@ RSpec.describe Dotfiler::CLI::Commands::List, type: :cli do
     end
 
     it "outputs message" do
-      expect(output).to receive(:info).with("No dotfiles are managed at the moment")
+      expect(shell).to receive(:print).with("No dotfiles are managed at the moment", :info)
 
       list.call
     end

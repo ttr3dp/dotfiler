@@ -33,8 +33,8 @@ module Dotfiler
       Dotfiler::Remover.new
     end
 
-    register "output", memoize: true do
-      Dotfiler::Output.new
+    register "shell", memoize: true do
+      Dotfiler::Shell.new
     end
   end
 
@@ -50,4 +50,4 @@ require "dotfiler/mover"
 require "dotfiler/symlinker"
 require "dotfiler/remover"
 
-require "dotfiler/output"
+require "dotfiler/shell"

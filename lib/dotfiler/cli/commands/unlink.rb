@@ -2,7 +2,7 @@ module Dotfiler
   module CLI
     module Commands
       class Unlink < Command
-        include Dotfiler::Import["links", "mover", "remover", "output"]
+        include Dotfiler::Import["links", "mover", "remover", "shell"]
 
         desc "Unlink specified dotfile and restore it to original location"
 
@@ -23,7 +23,7 @@ module Dotfiler
         def validate_tag!(tag)
           return if tag_exists?(tag)
 
-          output.error("'#{tag}' tag doesn't exist")
+          shell.print("'#{tag}' tag doesn't exist", :error)
           exit(1)
         end
 

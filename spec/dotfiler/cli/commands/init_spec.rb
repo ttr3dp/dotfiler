@@ -1,7 +1,7 @@
 require "spec_helper"
 
 RSpec.describe Dotfiler::CLI::Commands::Init, type: :cli do
-  let(:output) { Dotfiler::Output.new }
+  let(:shell) { Dotfiler::Shell.new }
   let(:init) { described_class.new(command_name: "init", output: output) }
   let(:dotfiles_path) { test_path("dotfiles") }
   let(:options) { { path: dotfiles_path } }
@@ -32,7 +32,7 @@ RSpec.describe Dotfiler::CLI::Commands::Init, type: :cli do
     let(:dotfiles_path) { test_path('/oops\//dotfiles') }
 
     it "outputs error message" do
-      expect(output).to receive(:error)
+      expect(shell).to receive(:print).with_args(:error)
     end
 
     it "exits with code 1" do
