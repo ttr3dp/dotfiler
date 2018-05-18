@@ -9,7 +9,7 @@ module Dotfiler
         argument :path, required: true, desc: "Dotfiles directory path"
         option :git, type: :boolean, default: true, desc: "Initialize git repo for dotfiles directory"
 
-        def call(path:, options: {})
+        def call(path:, **options)
           dotfiles_path = fs.path(path)
 
           begin

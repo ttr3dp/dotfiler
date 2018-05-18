@@ -1,18 +1,11 @@
+require "forwardable"
+
 module Dotfiler
   class Links
+    extend Forwardable
     include Dotfiler::Import[fs: "file_system", config: "config"]
 
-    def self.parse(lines)
-      lines.each_with_object({}) do |line, result|
-        sanitized_line = line.gsub("\n", "")
-
-        next if sanitized_line.empty?
-
-        tag, link, path = sanitized_line.split(" :: ")
-
-        result[tag] = { link: link, path: path }
-      end
-    end
+    def_delegators :config, :home
 
     def initialize(args)
       super(args)
@@ -53,7 +46,7 @@ module Dotfiler
 
     def load_data!
       @data = if fs.file_exists?(config.links)
-                self.class.parse(File.readlines(config.links))
+                parse(File.readlines(config.links))
               else
                 {}
               end
@@ -63,8 +56,25 @@ module Dotfiler
 
     private
 
+    def parse(lines)
+      lines.each_with_object({}) do |line, result|
+        sanitized_line = line.gsub("\n", "")
+
+        next if sanitized_line.empty?
+
+        tag, link, path = sanitized_line.split(" :: ")
+
+        link = link.sub(home(relative: true), home)
+        path = path.sub(home(relative: true), home)
+
+        result[tag] = { link: link, path: path }
+      end
+    end
+
     def link_to_line(tag, info)
-      link, path = info.values_at(:link, :path)
+      link, path = info.values_at(:link, :path).map do |item|
+        item.sub(home, home(relative: true))
+      end
 
       [tag, link, path].join(" :: ") + "\n"
     end

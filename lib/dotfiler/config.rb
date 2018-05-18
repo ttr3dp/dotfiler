@@ -20,8 +20,8 @@ module Dotfiler
       fs.path("#{home}/#{CONFIG_FILE}")
     end
 
-    def home
-      Dir.home
+    def home(relative: false)
+      relative ? "~" : Dir.home
     end
 
     def links

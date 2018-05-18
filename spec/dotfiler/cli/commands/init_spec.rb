@@ -4,9 +4,9 @@ RSpec.describe Dotfiler::CLI::Commands::Init, type: :cli do
   let(:output) { Dotfiler::Output.new }
   let(:init) { described_class.new(command_name: "init", output: output) }
   let(:dotfiles_path) { test_path("dotfiles") }
-  let(:options) { {} }
+  let(:options) { { path: dotfiles_path } }
 
-  before { init.call(path: dotfiles_path, options: options) }
+  before { init.call(options) }
 
   it "creates initial configuration files" do
     expect(test_path(".dotfiler")).to be_a_file
@@ -42,7 +42,7 @@ RSpec.describe Dotfiler::CLI::Commands::Init, type: :cli do
 
   context "with options" do
     context "no git" do
-      let(:options) { { git: false } }
+      let(:options) { { path: dotfiles_path, git: false } }
 
       it "does not initialize git repo" do
         expect(test_path("dotfiles/.git")).not_to be_a_directory

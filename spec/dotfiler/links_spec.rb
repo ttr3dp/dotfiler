@@ -2,7 +2,7 @@ require "spec_helper"
 
 RSpec.describe Dotfiler::Links do
   let(:file_path) { "dotfiles/.links" }
-  let(:content) { "test :: #{test_path("test")} :: #{test_path("dotfiles/test")}\n" }
+  let(:content) { "test :: #{home_path("test")} :: #{home_path("dotfiles/test")}\n" }
   let(:file) { create_file(file_path, content) }
   let(:links) { described_class.new }
 
