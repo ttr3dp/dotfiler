@@ -3,13 +3,13 @@ require "spec_helper"
 RSpec.describe Dotfiler::Copier do
   let(:copier) { described_class.new }
 
-  it "copies file " do
+  it "copies file" do
     create_dir("foo")
     create_file("foo/bar")
 
     expect(test_path("foo/bar")).to be_a_file
 
-    copier.call(test_path("foo/bar"), test_path(""))
+    copier.call(to_test_path("foo/bar"), to_test_path(""))
 
     expect(file("bar")).to be_a_file
     expect(test_path("foo/bar")).to be_a_file
@@ -20,7 +20,7 @@ RSpec.describe Dotfiler::Copier do
 
     expect(test_path("foo/bar")).to be_a_directory
 
-    copier.call(test_path("foo/bar"), test_path(""))
+    copier.call(to_test_path("foo/bar"), to_test_path(""))
 
     expect(file("bar")).to be_a_directory
     expect(test_path("foo/bar")).to be_a_directory
@@ -34,7 +34,7 @@ RSpec.describe Dotfiler::Copier do
 
     create_dir("copied")
 
-    copier.call(test_path("foo"), test_path("copied"))
+    copier.call(to_test_path("foo"), to_test_path("copied"))
 
     expect(test_path("copied/foo")).to be_a_directory
     expect(test_path("copied/foo/bar")).to be_a_file
@@ -43,7 +43,7 @@ RSpec.describe Dotfiler::Copier do
   end
 
   it "raises error if source path is invalid" do
-    expect{ copier.call(test_path("foo"), test_path("bar")) }.to raise_error(
+    expect{ copier.call(to_test_path("foo"), to_test_path("bar")) }.to raise_error(
       Dotfiler::Error, /foo' does not exist/
     )
   end
@@ -51,7 +51,7 @@ RSpec.describe Dotfiler::Copier do
   it "raises error if target path is invalid" do
     create_file("test")
 
-    expect{ copier.call(test_path("test"), test_path("bar/baz")) }.to raise_error(
+    expect{ copier.call(to_test_path("test"), to_test_path("bar/baz")) }.to raise_error(
       Dotfiler::Error, /bar' does not exist/
     )
   end

@@ -3,20 +3,18 @@ module Dotfiler
     include Dotfiler::Import[fs: "file_system"]
 
     def call(source, target)
-      check_paths!(source, fs.to_pathname(target).parent)
+      check_paths!(source, target.parent_dir)
 
-      fs.copy(source, target)
+      fs.copy(source.to_s, target.to_s)
 
-      source_name = fs.basename(source)
-
-      fs.to_pathname(target).join(source_name).to_s
+      target.join(source.name)
     end
 
     private
 
     def check_paths!(*paths)
       paths.each do |path|
-        raise Error, "Path '#{path}' does not exist" unless fs.exists?(path)
+        raise Error, "Path '#{path}' does not exist" unless path.exists?
       end
     end
   end

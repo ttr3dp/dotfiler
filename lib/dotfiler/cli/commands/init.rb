@@ -2,7 +2,12 @@ module Dotfiler
   module CLI
     module Commands
       class Init < Command
-        include Dotfiler::Import[config: "config", shell: "shell", fs: "file_system"]
+        include Dotfiler::Import[
+          config: "config",
+          shell: "shell",
+          to_path: "to_path",
+          fs: "file_system"
+        ]
 
         desc "Create initial configuration. Create dotfiles dir at specified path. Initialize git repo."
 
@@ -10,7 +15,7 @@ module Dotfiler
         option :git, type: :boolean, default: true, desc: "Initialize git repo for dotfiles directory"
 
         def call(path:, **options)
-          dotfiles_path = fs.path(path)
+          dotfiles_path = to_path.call(path)
 
           begin
             create_config_file(config_file_contents(dotfiles_path))
@@ -19,66 +24,62 @@ module Dotfiler
 
             initialize_vcs_repo(dotfiles_path) unless options[:git] == false
           rescue => e
-            shell.print(e.message, :error)
-            exit(1)
+            shell.terminate(:error, message: e.message)
           end
         end
 
         private
 
         def config_file_contents(dotfiles_path)
-          "dotfiles: #{dotfiles_path}"
+          "dotfiles: #{dotfiles_path.to_s}"
         end
 
         def create_config_file(contents)
-          file_path = config.file.to_s
-
-          if fs.file_exists?(file_path)
-            answer = shell.prompt("Config file (#{file_path}) already exists. Would you like to overwrite it?")
+          if config.file_path.exists?
+            answer = shell.prompt("Config file (#{config.file_path}) already exists. Would you like to overwrite it?")
 
             return unless answer == :yes
           end
 
-          info("Creating config file (#{file_path})...")
-          fs.create_file(file_path, contents)
+          info("Creating config file (#{config.file_path})...")
+          fs.create_file(config.file_path.to_s, contents)
         end
 
         def create_dotfiles_dir(dotfiles_path)
-          if fs.dir_exists?(dotfiles_path)
+          if dotfiles_path.exists?
             answer = shell.prompt("Dotfiles directory (#{dotfiles_path}) already exists. Would you like to overwrite it?")
 
             return unless answer == :yes
 
             info("Removing existing dotfiles directory (#{dotfiles_path})...")
-            fs.remove(dotfiles_path)
+            fs.remove(dotfiles_path.to_s)
           end
 
           info("Creating dotfiles directory (#{dotfiles_path})...")
-          fs.create_dir(dotfiles_path)
+          fs.create_dir(dotfiles_path.to_s)
         end
 
         def create_links_file(dotfiles_path)
-          file_name = config.class::LINKS_FILE
-          path      = fs.to_pathname(dotfiles_path).join(file_name).to_s
+          links_file = dotfiles_path.join(config.links_file_name)
 
-          if fs.file_exists?(path)
-            answer = shell.prompt("Links file (#{path}) already exists. Would you like to overwrite it?")
+          if links_file.exists?
+            answer = shell.prompt("Links file (#{links_file}) already exists. Would you like to overwrite it?")
 
             return unless answer == :yes
           end
 
-          info("Creating links file (#{path})...")
-          fs.create_file(path)
+          info("Creating links file (#{links_file})...")
+          fs.create_file(links_file.to_s)
         end
 
         def initialize_vcs_repo(dotfiles_path)
-          if fs.dir_exists?(dotfiles_path + "/.git")
+          if dotfiles_path.join(".git").exists?
             answer = shell.prompt("Dotfiles dir (#{dotfiles_path}) is already a git repository. Would you like to reinitialize it?")
 
             return unless answer == :yes
           end
 
-          info(fs.execute("git", "init", dotfiles_path, capture: true))
+          info(fs.execute("git", "init", dotfiles_path.to_s, capture: true))
         end
 
         def info(message)

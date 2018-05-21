@@ -3,9 +3,9 @@ require "forwardable"
 module Dotfiler
   class Links
     extend Forwardable
-    include Dotfiler::Import[fs: "file_system", config: "config"]
+    include Dotfiler::Import[fs: "file_system", config: "config", to_path: "to_path"]
 
-    def_delegators :config, :home
+    def_delegators :config, :home_path, :relative_home_path
 
     def initialize(args)
       super(args)
@@ -21,7 +21,9 @@ module Dotfiler
     end
 
     def append!(tag, info)
-      File.open(config.links, "a") { |file| file << link_to_line(tag, info) }
+      File.open(config.links_file_path.to_s, "a") do |file|
+        file << link_to_line(tag, info)
+      end
 
       reload!
     end
@@ -33,7 +35,7 @@ module Dotfiler
         result << link_to_line(_tag, info)
       end
 
-      File.open(config.links, "w+") { |file| file << content }
+      File.open(config.links_file_path.to_s, "w+") { |file| file << content }
 
       reload!
     end
@@ -45,8 +47,8 @@ module Dotfiler
     end
 
     def load_data!
-      @data = if fs.file_exists?(config.links)
-                parse(File.readlines(config.links))
+      @data = if config.set?
+                parse(File.readlines(config.links_file_path.to_s))
               else
                 {}
               end
@@ -64,8 +66,8 @@ module Dotfiler
 
         tag, link, path = sanitized_line.split(" :: ")
 
-        link = link.sub(home(relative: true), home)
-        path = path.sub(home(relative: true), home)
+        link = link.sub(relative_home_path.to_s, home_path.to_s)
+        path = path.sub(relative_home_path.to_s, home_path.to_s)
 
         result[tag] = { link: link, path: path }
       end
@@ -73,7 +75,7 @@ module Dotfiler
 
     def link_to_line(tag, info)
       link, path = info.values_at(:link, :path).map do |item|
-        item.sub(home, home(relative: true))
+        item.sub(home_path.to_s, relative_home_path.to_s)
       end
 
       [tag, link, path].join(" :: ") + "\n"

@@ -1,4 +1,10 @@
+
 require "bundler/setup"
+
+SPEC_ROOT = File.dirname(__FILE__)
+TMP_DIR = (SPEC_ROOT + "/tmp").freeze
+ENV["DOTFILER_HOME"] = TMP_DIR
+
 require "support/file_system_helper"
 
 require "support/file_system_matchers"
@@ -9,8 +15,6 @@ require "dotfiler"
 # Must be required after "dotfiler"
 require "support/cli_helper"
 
-SPEC_ROOT = File.dirname(__FILE__)
-TMP_DIR = (SPEC_ROOT + "/tmp").freeze
 
 require "support/test_path_helper"
 
@@ -38,11 +42,6 @@ RSpec.configure do |config|
 
   # cli helper requires necessary files
   config.include CLIHelper, type: :cli
-
-  config.before(:each) do
-    # Set home dir to TMP_DIR
-    allow(Dir).to receive(:home).and_return(TMP_DIR)
-  end
 
   config.after(:each) do
     # Recreate TMP_DIR after each spec

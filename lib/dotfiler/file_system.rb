@@ -9,43 +9,6 @@ module Dotfiler
       @file_utils = FileUtils
     end
 
-    def file?(input)
-      File.file?(expand(input))
-    end
-
-    def dir?(input)
-      File.directory?(expand(input))
-    end
-
-    def symlink?(input)
-      File.symlink?(expand(input))
-    end
-
-    def file_exists?(input)
-      full_path = expand(input)
-      File.exist?(full_path) && file?(full_path)
-    end
-
-    def dir_exists?(input)
-      Dir.exists?(expand(input))
-    end
-
-    def exists?(input)
-      file_exists?(input) || dir_exists?(input)
-    end
-
-    def path(input)
-      expand(input)
-    end
-
-    def realpath(input)
-      File.realpath(expand(input))
-    end
-
-    def basename(input)
-      File.basename(input)
-    end
-
     def move(source_path, destination_path, *options)
       file_utils.move(source_path, destination_path, *options)
     end
@@ -76,14 +39,6 @@ module Dotfiler
       full_command = ([command] + command_options).join(" ")
 
       options[:capture] == true ?  `#{full_command}` : system(command, *options)
-    end
-
-    def expand(input)
-      File.expand_path(input)
-    end
-
-    def to_pathname(input)
-      Pathname.new(input)
     end
   end
 end

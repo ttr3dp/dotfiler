@@ -1,5 +1,11 @@
 module Dotfiler
   class Shell
+    TERMINATION_CODES = {
+      clean: 0,
+      info:  0,
+      error: 1
+    }.freeze
+
     def initialize(output: $stdout, input: $stdin, error: $stderr)
       @output = output
       @error = error
@@ -24,7 +30,7 @@ module Dotfiler
         question += "\n\n"
         available_answers.each { |key, details| question += "  #{key}) #{details[:desc]}\n" }
       else
-        available_answers = { "y" => { value: :yes }, "n" => { value: :no } }
+        available_answers = default_prompt_answer
         question += " [y/N] "
       end
 
@@ -32,15 +38,23 @@ module Dotfiler
 
       answer_key = input.gets.strip.downcase
 
-      if (answer = available_answers[answer_key]) && answer.is_a?(Hash)
-        answer.fetch(:value)
-      else
-        :other
-      end
+      return :other unless available_answers.key?(answer_key)
+
+      available_answers[answer_key].fetch(:value)
+    end
+
+    def terminate(type, message: nil)
+      print(message, type) unless message.nil?
+      exit(TERMINATION_CODES[type])
     end
 
     private
 
     attr_reader :output, :error, :input
+
+    def default_prompt_answer
+      { "y" => { value: :yes }, "n" => { value: :no } }
+    end
+
   end
 end

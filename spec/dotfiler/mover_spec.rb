@@ -7,7 +7,7 @@ RSpec.describe Dotfiler::Mover do
     create_dir("foo")
     create_file("foo/bar")
 
-    mover.call(test_path("foo/bar"), test_path(""))
+    mover.call(to_test_path(test_path("foo/bar")), to_test_path(""))
 
     expect(file("bar")).to be_a_file
     expect(test_path("foo/bar")).not_to be_a_file
@@ -16,7 +16,7 @@ RSpec.describe Dotfiler::Mover do
   it "moves directory" do
     create_dir("foo/bar")
 
-    mover.call(test_path("foo/bar"), test_path(""))
+    mover.call(to_test_path("foo/bar"), to_test_path(""))
 
     expect(file("bar")).to be_a_directory
     expect(test_path("foo/bar")).not_to be_a_directory
@@ -26,13 +26,13 @@ RSpec.describe Dotfiler::Mover do
     create_dir("foo")
     create_file("foo/bar")
 
-    result = mover.call(test_path("foo/bar"), test_path(""))
+    result = mover.call(to_test_path("foo/bar"), to_test_path(""))
 
-    expect(result).to eq(test_path("bar"))
+    expect(result.to_s).to eq(test_path("bar"))
   end
 
   it "raises error if source path is invalid" do
-    expect{ mover.call(test_path("foo"), test_path("bar")) }.to raise_error(
+    expect{ mover.call(to_test_path("foo"), to_test_path("bar")) }.to raise_error(
       Dotfiler::Error, /foo' does not exist/
     )
   end
@@ -40,7 +40,7 @@ RSpec.describe Dotfiler::Mover do
   it "raises error if target path is invalid" do
     create_file("foo")
 
-    expect{ mover.call(test_path("foo"), test_path("bar/baz")) }.to raise_error(
+    expect{ mover.call(to_test_path("foo"), to_test_path("bar/baz")) }.to raise_error(
       Dotfiler::Error, /bar' does not exist/
     )
   end

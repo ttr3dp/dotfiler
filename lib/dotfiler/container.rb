@@ -5,6 +5,10 @@ module Dotfiler
   class Container
     extend Dry::Container::Mixin
 
+    register "to_path", memoize: true do
+      Dotfiler::Path.method(:new)
+    end
+
     register "file_system", memoize: true do
       Dotfiler::FileSystem.new
     end
@@ -41,6 +45,7 @@ module Dotfiler
   Import = Dry::AutoInject(Container)
 end
 
+require "dotfiler/path"
 require "dotfiler/file_system"
 require "dotfiler/config"
 require "dotfiler/links"

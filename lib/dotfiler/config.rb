@@ -2,41 +2,56 @@ require "yaml"
 
 module Dotfiler
   class Config
-    CONFIG_FILE = ".dotfiler".freeze
-    LINKS_FILE  = ".links".freeze
+    CONFIG_FILE        = ".dotfiler".freeze
+    LINKS_FILE         = ".links".freeze
+    RELATIVE_HOME_PATH = "~".freeze
 
-    include Dotfiler::Import[fs: "file_system"]
+    include Dotfiler::Import[fs: "file_system", to_path: "to_path"]
 
     def initialize(*args)
       super
       @data = load_data
     end
 
-    def [](key)
-      @data[key]
+    def [](setting)
+      @data[setting]
     end
 
-    def file
-      fs.path("#{home}/#{CONFIG_FILE}")
+    def file_path
+      @_file_path ||= home_path.join(CONFIG_FILE)
     end
 
-    def home(relative: false)
-      relative ? "~" : Dir.home
+    def home_path
+      @_home_path ||= path(ENV["DOTFILER_HOME"] || Dir.home)
     end
 
-    def links
-      fs.path("#{self[:dotfiles]}/#{LINKS_FILE}")
+    def relative_home_path
+      @_relative_home_path ||= path(RELATIVE_HOME_PATH, expand: false)
+    end
+
+    def set?
+      file_path.exists?
+    end
+
+    def links_file_path
+      @_links_file_path = path(self[:dotfiles]).join(links_file_name) if set?
+    end
+
+    def links_file_name
+      LINKS_FILE
     end
 
     private
 
+    def path(input, *opts)
+      to_path.call(input, *opts)
+    end
+
     def load_data
-      if fs.file_exists?(file)
-        YAML.load_file(file).each_with_object({}) do |(k, v), result|
-          result[k.to_sym] = v
-        end
-      else
-        {}
+      return {} unless set?
+
+      YAML.load_file(file_path.to_s).each_with_object({}) do |(setting, value), result|
+        result[setting.to_sym] = value
       end
     end
   end

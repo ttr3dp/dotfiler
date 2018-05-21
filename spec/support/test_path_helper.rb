@@ -12,4 +12,8 @@ module TestPathHelper
 
     pathname.join(path).to_s
   end
+
+  def to_test_path(string)
+    Dotfiler.resolve["to_path"].call(test_path(string))
+  end
 end

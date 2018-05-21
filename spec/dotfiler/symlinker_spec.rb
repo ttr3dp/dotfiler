@@ -7,7 +7,7 @@ RSpec.describe Dotfiler::Symlinker do
     create_dir("foo")
     create_file("foo/bar")
 
-    symlinker.call(test_path("foo/bar"), test_path("bar"))
+    symlinker.call(to_test_path("foo/bar"), to_test_path("bar"))
 
     expect(file("bar")).to be_a_symlink_of(test_path("foo/bar"))
   end
@@ -15,7 +15,7 @@ RSpec.describe Dotfiler::Symlinker do
   it "symlinks directory" do
     create_dir("foo/bar")
 
-    symlinker.call(test_path("foo/bar"), test_path("bar"))
+    symlinker.call(to_test_path("foo/bar"), to_test_path("bar"))
 
     expect(test_path("bar")).to be_a_symlink_of(test_path("foo/bar"))
   end
@@ -24,13 +24,13 @@ RSpec.describe Dotfiler::Symlinker do
     create_dir("foo")
     create_file("foo/bar")
 
-    result = symlinker.call(test_path("foo/bar"), test_path("bar"))
+    result = symlinker.call(to_test_path("foo/bar"), to_test_path("bar"))
 
-    expect(result).to eq(test_path("bar"))
+    expect(result.to_s).to eq(test_path("bar"))
   end
 
   it "raises error if source path is invalid" do
-    expect{ symlinker.call(test_path("foo"), test_path("bar")) }.to raise_error(
+    expect{ symlinker.call(to_test_path("foo"), to_test_path("bar")) }.to raise_error(
       Dotfiler::Error, /foo' does not exist/
     )
   end
@@ -38,7 +38,7 @@ RSpec.describe Dotfiler::Symlinker do
   it "raises error if symlink path is invalid" do
     create_file("foo")
 
-    expect{ symlinker.call(test_path("foo"), test_path("bar/baz")) }.to raise_error(
+    expect{ symlinker.call(to_test_path("foo"), to_test_path("bar/baz")) }.to raise_error(
       Dotfiler::Error, /bar' does not exist/
     )
   end
