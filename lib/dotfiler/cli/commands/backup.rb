@@ -1,17 +1,19 @@
 module Dotfiler
   module CLI
     module Commands
-      class Backup < Hanami::CLI::Command
+      class Backup < Command
         BACKUP_DIR       = ".dotfiler_backup".freeze
         TIMESTAMP_FORMAT = "%Y_%m_%d_%H_%M_%S".freeze
 
-        include Dotfiler::Import["config", "copier", "remover", to_path: "to_path"]
+        include Dotfiler::Import["copier", "remover"]
 
         desc "Backup existing dotfiles dir"
 
         def call
-          copier.call(dotfiles_path, backup_dir_path)
-          remover.call(backup_dir_path.join(".git"), only_symlinks: false)
+          handle_errors do
+            copier.call(dotfiles_path, backup_dir_path)
+            remover.call(backup_dir_path.join(".git"), only_symlinks: false)
+          end
         end
 
         private

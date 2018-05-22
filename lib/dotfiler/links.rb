@@ -47,7 +47,7 @@ module Dotfiler
     end
 
     def load_data!
-      @data = if config.set?
+      @data = if config.set? && config.links_file_path.exists?
                 parse(File.readlines(config.links_file_path.to_s))
               else
                 {}

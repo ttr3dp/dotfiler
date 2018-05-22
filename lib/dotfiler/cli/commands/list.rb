@@ -2,18 +2,20 @@ module Dotfiler
   module CLI
     module Commands
       class List < Command
-        include Dotfiler::Import["links", "shell"]
+        include Dotfiler::Import["links"]
 
         desc "Lists all managed dotfiles"
 
         argument :tags, desc: "List tags only"
 
         def call(tags: nil)
-          if links.list.empty?
-            shell.terminate(:info, message: "No dotfiles are managed at the moment")
-          else
-            content = generate_list(tags_only: !tags.nil?)
-            shell.print(content)
+          handle_errors do
+            if links.list.empty?
+              shell.terminate(:info, message: "No dotfiles are managed at the moment")
+            else
+              content = generate_list(tags_only: !tags.nil?)
+              shell.print(content)
+            end
           end
         end
 

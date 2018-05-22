@@ -1,12 +1,15 @@
 require "spec_helper"
+require "support/cli_error_handler_example"
 
 RSpec.describe Dotfiler::CLI::Commands::Init, type: :cli do
   let(:shell) { Dotfiler::Shell.new }
-  let(:init) { described_class.new(command_name: "init", output: output) }
+  let(:command) { described_class.new(command_name: "init", shell: shell) }
   let(:dotfiles_path) { test_path("dotfiles") }
   let(:options) { { path: dotfiles_path } }
 
-  before { init.call(options) }
+  before { command.call(options) }
+
+  it_behaves_like "a command that handles errors", :to_path, path: ""
 
   it "creates initial configuration files" do
     expect(test_path(".dotfiler")).to be_a_file
@@ -36,7 +39,7 @@ RSpec.describe Dotfiler::CLI::Commands::Init, type: :cli do
     end
 
     it "exits with code 1" do
-      expect{ init.call(path: dotfiles_path, options: options) }.to terminate.with_code(1)
+      expect{ command.call(path: dotfiles_path, options: options) }.to terminate.with_code(1)
     end
   end
 

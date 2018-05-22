@@ -1,9 +1,9 @@
 require "spec_helper"
+require "support/cli_error_handler_example"
 
 RSpec.describe Dotfiler::CLI::Commands::List, type: :cli do
-
   let(:shell) { Dotfiler::Shell.new }
-  let(:list) { described_class.new(command_name: "list", shell: shell) }
+  let(:command) { described_class.new(command_name: "list", shell: shell) }
 
   before do
     initial_setup
@@ -12,6 +12,8 @@ RSpec.describe Dotfiler::CLI::Commands::List, type: :cli do
     end
     add_links(links)
   end
+
+  it_behaves_like "a command that handles errors", :links
 
   it "lists all links" do
     expected_output = <<-EOF
@@ -31,7 +33,7 @@ RSpec.describe Dotfiler::CLI::Commands::List, type: :cli do
 
     expect(shell).to receive(:print).with(expected_output)
 
-    list.call
+    command.call
   end
 
   it "lists tags only" do
@@ -39,7 +41,7 @@ RSpec.describe Dotfiler::CLI::Commands::List, type: :cli do
 
     expect(shell).to receive(:print).with(expected_output)
 
-    list.call(tags: "tags")
+    command.call(tags: "tags")
   end
 
   context "when there are no links" do
@@ -50,11 +52,11 @@ RSpec.describe Dotfiler::CLI::Commands::List, type: :cli do
     it "outputs message" do
       expect(shell).to receive(:print).with("No dotfiles are managed at the moment", :info)
 
-      list.call
+      command.call
     end
 
     it "exits with code 0" do
-      expect{ list.call }.to terminate.with_code(0)
+      expect{ command.call }.to terminate.with_code(0)
     end
   end
 end
