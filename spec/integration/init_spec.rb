@@ -1,12 +1,11 @@
-require "spec_helper"
 require "open3"
 
+require "spec_helper"
+
 RSpec.describe "init", type: :integration do
-  let(:bin_path) { Pathname.new(File.expand_path(__FILE__)).join("../../..").join("exe/dotfiler").to_s }
-  let(:dotfiles_path) { test_path("dotfiles") }
-  let(:options) { "" }
   let(:command) { "#{bin_path} init #{dotfiles_path} #{options}" }
-  let(:execute) { `#{command}` }
+
+  include_context "integration"
 
   it "creates initial configuration files" do
     execute

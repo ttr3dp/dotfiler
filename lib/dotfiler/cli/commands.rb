@@ -20,6 +20,15 @@ module Dotfiler
       register "list",    List,    aliases: ["ls"]
       register "backup",  Backup
       register "version", Version, aliases: ["v", "-v", "--version"]
+
+      %w(link unlink list backup).each do |cmd|
+        before(cmd) do
+          unless Dotfiler.resolve[:config].set?
+            $stderr.puts("ERROR: Dotfiler needs to be setup first. Check `dotfiler init -h`")
+            exit(1)
+          end
+        end
+      end
     end
   end
 end

@@ -1,5 +1,6 @@
 require "spec_helper"
-require "support/cli_error_handler_example"
+
+require "support/shared/examples/cli_error_handler_example"
 
 RSpec.describe Dotfiler::CLI::Commands::List, type: :cli do
   let(:shell) { Dotfiler::Shell.new }

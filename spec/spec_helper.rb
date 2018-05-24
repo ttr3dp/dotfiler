@@ -5,17 +5,19 @@ SPEC_ROOT = File.dirname(__FILE__)
 TMP_DIR = (SPEC_ROOT + "/tmp").freeze
 ENV["DOTFILER_HOME"] = TMP_DIR
 
-require "support/file_system_helper"
+require "support/helpers/file_system_helper"
 
-require "support/file_system_matchers"
-require "support/terminate_matchers"
+require "support/matchers/file_system_matchers"
+require "support/matchers/terminate_matchers"
 
 require "dotfiler"
 
 # Must be required after "dotfiler"
-require "support/cli_helper"
+require "support/helpers/cli_helper"
 
-require "support/test_path_helper"
+require "support/helpers/test_path_helper"
+
+require "support/shared/contexts/integration"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
