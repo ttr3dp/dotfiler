@@ -15,7 +15,6 @@ require "dotfiler"
 # Must be required after "dotfiler"
 require "support/cli_helper"
 
-
 require "support/test_path_helper"
 
 RSpec.configure do |config|
@@ -45,8 +44,8 @@ RSpec.configure do |config|
 
   config.after(:each) do
     # Recreate TMP_DIR after each spec
-    system("rm", "-rf", TMP_DIR)
-    system("mkdir", TMP_DIR)
+    FileUtils.rm_rf(TMP_DIR)
+    FileUtils.mkdir(TMP_DIR)
   end
 
   config.around(:example) do |example|

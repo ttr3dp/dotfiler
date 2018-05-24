@@ -9,7 +9,7 @@ module Dotfiler
 
         desc "Backup existing dotfiles dir"
 
-        def call
+        def call(*)
           handle_errors do
             copier.call(dotfiles_path, backup_dir_path)
             remover.call(backup_dir_path.join(".git"), only_symlinks: false)

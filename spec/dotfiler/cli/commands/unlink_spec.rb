@@ -29,7 +29,6 @@ RSpec.describe Dotfiler::CLI::Commands::Unlink, type: :cli do
   end
 
   context "when tag does not exist" do
-
     it "outputs error" do
       expect(shell).to receive(:print).with("'oops' tag doesn't exist", :error)
       command.call(tag: "oops")
