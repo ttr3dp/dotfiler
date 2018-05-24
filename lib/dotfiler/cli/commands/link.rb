@@ -18,8 +18,11 @@ module Dotfiler
             dotfiles_path = to_path.(config[:dotfiles])
             dotfile_path  = resolve_dotfile_path(path, dotfiles_path, options)
             target_path   = to_path.(options.fetch(:target, path.to_s))
+
+            info("Symlinking dotfile (#{dotfile_path}) to #{target_path}...")
             symlink_path  = symlinker.call(dotfile_path, target_path)
 
+            info("Adding #{tag} to Dotfiler links...")
             links.append!(tag, link: symlink_path.to_s, path: dotfile_path.to_s)
           end
         end
@@ -29,7 +32,7 @@ module Dotfiler
         def validate_tag!(tag)
           return unless tag_exists?(tag)
 
-          terminate(:error, message: "'#{tag}' tag already exists")
+          error!("'#{tag}' tag already exists")
         end
 
         def tag_exists?(tag)
@@ -38,10 +41,11 @@ module Dotfiler
 
         def resolve_dotfile_path(path, dotfiles_path, options)
           if dotfiles_path.contains?(path)
-            terminate(:error, message: already_dotfile_error(path, dotfiles_path)) if options[:target].nil?
+            error!(already_dotfile_error(path, dotfiles_path)) if options[:target].nil?
 
             path
           else
+            info("Moving #{path} to dotfiles (#{dotfiles_path})...")
             mover.call(path, dotfiles_path)
           end
         end
@@ -50,10 +54,6 @@ module Dotfiler
           "Specified #{path.file? ? "file" : "directory"} (#{path}) " +
             "is already in dotfiles directory (#{dotfiles_path})." +
             "\nIf you want to symlink it, please provide `--target` option"
-        end
-
-        def terminate(*args)
-          shell.terminate(*args)
         end
       end
     end

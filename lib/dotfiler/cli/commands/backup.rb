@@ -11,6 +11,7 @@ module Dotfiler
 
         def call(*)
           handle_errors do
+            info("Backing up dotfiles directory (#{dotfiles_path}) to #{backup_dir_path}...")
             copier.call(dotfiles_path, backup_dir_path)
             remover.call(backup_dir_path.join(".git"), only_symlinks: false)
           end

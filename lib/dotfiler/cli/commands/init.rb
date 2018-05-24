@@ -16,7 +16,6 @@ module Dotfiler
             create_config_file(config_file_contents(dotfiles_path))
             create_dotfiles_dir(dotfiles_path)
             create_links_file(dotfiles_path)
-
             initialize_vcs_repo(dotfiles_path) unless options[:git] == false
           end
         end
@@ -29,7 +28,7 @@ module Dotfiler
 
         def create_config_file(contents)
           if config.file_path.exists?
-            answer = shell.prompt("Config file (#{config.file_path}) already exists. Would you like to overwrite it?")
+            answer = prompt("Config file (#{config.file_path}) already exists. Would you like to overwrite it?")
 
             return unless answer == :yes
           end
@@ -40,7 +39,7 @@ module Dotfiler
 
         def create_dotfiles_dir(dotfiles_path)
           if dotfiles_path.exists?
-            answer = shell.prompt("Dotfiles directory (#{dotfiles_path}) already exists. Would you like to overwrite it?")
+            answer = prompt("Dotfiles directory (#{dotfiles_path}) already exists. Would you like to overwrite it?")
 
             return unless answer == :yes
 
@@ -56,7 +55,7 @@ module Dotfiler
           links_file = dotfiles_path.join(config.links_file_name)
 
           if links_file.exists?
-            answer = shell.prompt("Links file (#{links_file}) already exists. Would you like to overwrite it?")
+            answer = prompt("Links file (#{links_file}) already exists. Would you like to overwrite it?")
 
             return unless answer == :yes
           end
@@ -67,16 +66,12 @@ module Dotfiler
 
         def initialize_vcs_repo(dotfiles_path)
           if dotfiles_path.join(".git").exists?
-            answer = shell.prompt("Dotfiles dir (#{dotfiles_path}) is already a git repository. Would you like to reinitialize it?")
+            answer = prompt("Dotfiles dir (#{dotfiles_path}) is already a git repository. Would you like to reinitialize it?")
 
             return unless answer == :yes
           end
 
           info(fs.execute("git", "init", dotfiles_path.to_s, capture: true))
-        end
-
-        def info(message)
-          shell.print(message, :info)
         end
       end
     end

@@ -16,8 +16,14 @@ module Dotfiler
               to_path.(item)
             end
 
+            info("Removing symlink (#{symlink_path})...")
             remover.call(symlink_path)
+
+            info("Restoring dotfile (#{dotfile_path}) to its original location (#{symlink_path})...")
             mover.call(dotfile_path, symlink_path)
+
+
+            info("Removing '#{tag}' from Dotfiler links...")
             links.remove!(tag)
           end
         end

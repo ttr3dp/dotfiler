@@ -22,6 +22,22 @@ module Dotfiler
             end
           end
         end
+
+        def info(message)
+          shell.print(message, :info)
+        end
+
+        def error!(message)
+          terminate(:error, message: message)
+        end
+
+        def terminate(*args)
+          shell.terminate(*args)
+        end
+
+        def prompt(*args)
+          shell.prompt(*args)
+        end
       end
     end
   end

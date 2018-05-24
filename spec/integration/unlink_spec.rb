@@ -35,6 +35,16 @@ RSpec.describe "unlink", type: :integration do
     expect(File.read(test_path("dotfiles/.links"))).to eq("")
   end
 
+  it "outputs info for each operation" do
+    expected_output = <<-EOF
+#  Removing symlink (#{file})...
+#  Restoring dotfile (#{dotfiles_path + "/testrc"}) to its original location (#{file})...
+#  Removing '#{tag}' from Dotfiler links...
+    EOF
+
+    expect(execute).to eq(expected_output)
+  end
+
   context "when tag does not exist" do
     let(:tag) { "oops" }
 

@@ -37,6 +37,16 @@ RSpec.describe "link", type: :integration do
     )
   end
 
+  it "outputs info for each operation" do
+    expected_output = <<-EOF
+#  Moving #{file} to dotfiles (#{dotfiles_path})...
+#  Symlinking dotfile (#{dotfiles_path + "/testrc"}) to #{file}...
+#  Adding #{tag} to Dotfiler links...
+    EOF
+
+    expect(execute).to eq(expected_output)
+  end
+
   context "with target option" do
     let(:options) { "-t #{test_path("dot_testrc")}" }
 
