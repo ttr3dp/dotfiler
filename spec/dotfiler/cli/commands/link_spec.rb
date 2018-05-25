@@ -68,4 +68,69 @@ RSpec.describe Dotfiler::CLI::Commands::Link, type: :cli do
       expect{ command.call(tag: "foo", path: "") }.to terminate.with_code(1)
     end
   end
+
+  context "when dotfile already exists" do
+    let(:input) { StringIO.new }
+    let(:output) { StringIO.new }
+    let(:shell) { Dotfiler::Shell.new(input: input, output: output) }
+
+    before do
+      create_file(test_path("dotfiles/test"), "old test")
+      create_file(test_path("test"), "new test")
+    end
+
+    it "prompts for continuation" do
+      available_options = {
+        "1" => { value: :overwrite,            desc: "Overwrite it" },
+        "2" => { value: :backup_and_overwrite, desc: "Backup and overwrite it" },
+        "3" => { value: :cancel,               desc: "Cancel"}
+      }
+
+      expect(shell).to receive(:prompt).with(
+        "Dotfile (#{test_path("dotfiles/test")}) already exists.\nWould you like to:",
+        available_options
+      )
+
+      command.call(tag: "test", path: test_path("test"))
+    end
+
+    context "answer" do
+      context "1" do
+        it "overwrites dotfile" do
+          allow(input).to receive(:gets).and_return("1")
+
+          command.call(tag: "test", path: test_path("test"))
+
+          expect(File.read(test_path("dotfiles/test"))).to eq("new test")
+        end
+      end
+
+      context "2" do
+        it "backs up and overwrites dotfile" do
+          allow(input).to receive(:gets).and_return("2")
+
+          command.call(tag: "test", path: test_path("test"))
+
+          expect(File.read(test_path("dotfiles/test_old"))).to eq("old test")
+          expect(File.read(test_path("dotfiles/test"))).to eq("new test")
+        end
+      end
+
+      context "3" do
+        it "cancels" do
+          allow(input).to receive(:gets).and_return("3")
+
+          expect(command.call(tag: "test", path: test_path("test"))).to terminate.with_code(0)
+        end
+      end
+
+      context "default" do
+        it "cancels" do
+          allow(input).to receive(:gets).and_return("oops")
+
+          expect(command.call(tag: "test", path: test_path("test"))).to terminate.with_code(0)
+        end
+      end
+    end
+  end
 end

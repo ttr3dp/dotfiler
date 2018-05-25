@@ -45,8 +45,7 @@ module Dotfiler
 
             path
           else
-            info("Moving #{path} to dotfiles (#{dotfiles_path})...")
-            mover.call(path, dotfiles_path)
+            safely_move(path, dotfiles_path)
           end
         end
 
@@ -54,6 +53,43 @@ module Dotfiler
           "Specified #{path.file? ? "file" : "directory"} (#{path}) " +
             "is already in dotfiles directory (#{dotfiles_path})." +
             "\nIf you want to symlink it, please provide `--target` option"
+        end
+
+        def safely_move(source, destination)
+          full_destination_path = destination.join(source.name)
+
+          if full_destination_path.exists?
+            available_options = {
+              "1" => { value: :overwrite,            desc: "Overwrite it" },
+              "2" => { value: :backup_and_overwrite, desc: "Backup and overwrite it" },
+              "3" => { value: :cancel,               desc: "Cancel"}
+            }
+            answer = prompt(
+              "Dotfile (#{full_destination_path}) already exists.\nWould you like to:",
+              available_options
+            )
+
+            case answer
+            when :overwrite
+              # fall-through
+            when :backup_and_overwrite
+              backup(full_destination_path)
+            else
+              terminate(:clean, message: "Cancelling...")
+            end
+          end
+
+          move(source, destination)
+        end
+
+        def backup(path)
+          info("Backing up #{path} to #{path}_old")
+          mover.call(path, to_path.(path.to_s + "_old"))
+        end
+
+        def move(source, destination)
+          info("Moving #{source} to dotfiles (#{destination})...")
+          mover.call(source, destination)
         end
       end
     end
