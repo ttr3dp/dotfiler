@@ -31,7 +31,7 @@ RSpec.describe Dotfiler::CLI::Commands::Link, type: :cli do
     links_file_content = File.read(test_path("dotfiles/.links"))
 
     expect(links_file_content).to eq(
-      "foo :: #{home_path("foo")} :: #{home_path("dotfiles/foo")}\n"
+      "foo :: %home%/foo :: %dotfiles%/foo\n"
     )
   end
 

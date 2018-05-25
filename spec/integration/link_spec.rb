@@ -38,7 +38,7 @@ RSpec.describe "link", type: :integration do
       links_file_content = File.read(test_path("dotfiles/.links"))
 
       expect(links_file_content).to eq(
-        "test :: #{home_path("testrc")} :: #{home_path("dotfiles/testrc")}\n"
+        "test :: %home%/testrc :: %dotfiles%/testrc\n"
       )
     end
 

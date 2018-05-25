@@ -5,6 +5,9 @@ module Dotfiler
     extend Forwardable
     include Dotfiler::Import[fs: "file_system", config: "config", to_path: "to_path"]
 
+    HOME_PLACEHOLDER     = "%home%".freeze
+    DOTFILES_PLACEHOLDER = "%dotfiles%".freeze
+
     def_delegators :config, :home_path, :relative_home_path
 
     def initialize(args)
@@ -18,6 +21,10 @@ module Dotfiler
 
     def tags
       @data.keys
+    end
+
+    def tag_taken?(tag)
+      tags.include?(tag)
     end
 
     def append!(tag, info)
@@ -47,7 +54,7 @@ module Dotfiler
     end
 
     def load_data!
-      @data = if config.set? && config.links_file_path.exists?
+      @data = if config.set?
                 parse(File.readlines(config.links_file_path.to_s))
               else
                 {}
@@ -66,17 +73,18 @@ module Dotfiler
 
         tag, link, path = sanitized_line.split(" :: ")
 
-        link = link.sub(relative_home_path.to_s, home_path.to_s)
-        path = path.sub(relative_home_path.to_s, home_path.to_s)
+        link = link.sub(HOME_PLACEHOLDER, home_path.to_s)
+        path = path.sub(DOTFILES_PLACEHOLDER, config[:dotfiles])
 
         result[tag] = { link: link, path: path }
       end
     end
 
     def link_to_line(tag, info)
-      link, path = info.values_at(:link, :path).map do |item|
-        item.sub(home_path.to_s, relative_home_path.to_s)
-      end
+      link, path = info.values_at(:link, :path)
+
+      link       = link.sub(home_path.to_s, HOME_PLACEHOLDER)
+      path       = path.sub(config[:dotfiles], DOTFILES_PLACEHOLDER)
 
       [tag, link, path].join(" :: ") + "\n"
     end

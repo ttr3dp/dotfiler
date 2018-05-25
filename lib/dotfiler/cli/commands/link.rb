@@ -30,13 +30,9 @@ module Dotfiler
         private
 
         def validate_tag!(tag)
-          return unless tag_exists?(tag)
+          return unless links.tag_taken?(tag)
 
           error!("'#{tag}' tag already exists")
-        end
-
-        def tag_exists?(tag)
-          links.tags.include?(tag)
         end
 
         def resolve_dotfile_path(path, dotfiles_path, options)
