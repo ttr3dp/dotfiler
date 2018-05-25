@@ -7,7 +7,8 @@ require "support/shared/examples/initialization_guard_examples"
 RSpec.describe "link", type: :integration do
   let(:tag) { "test" }
   let(:file) { test_path("testrc") }
-  let(:command) { "#{bin_path} link #{tag} #{file} #{options}" }
+  let(:command_name) { "link" }
+  let(:command) { "#{bin_path} #{command_name} #{tag} #{file} #{options}" }
 
   include_context "integration"
 
@@ -84,6 +85,14 @@ RSpec.describe "link", type: :integration do
 
         expect(error.strip).to eq("ERROR: 'test' tag already exists")
         expect(status.exitstatus).to eq(1)
+      end
+    end
+
+    context "aliases" do
+      let(:command_name) { "ln" }
+
+      it "works" do
+        execute
       end
     end
   end

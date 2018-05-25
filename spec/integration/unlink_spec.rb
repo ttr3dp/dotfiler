@@ -7,7 +7,8 @@ require "support/shared/examples/initialization_guard_examples"
 RSpec.describe "unlink", type: :integration do
   let(:tag) { "test" }
   let(:file) { test_path("testrc") }
-  let(:command) { "#{bin_path} unlink #{tag}" }
+  let(:command_name) { "unlink" }
+  let(:command) { "#{bin_path} #{command_name} #{tag}" }
 
   include_context "integration"
 
@@ -59,6 +60,14 @@ RSpec.describe "unlink", type: :integration do
 
         expect(error.strip).to eq("ERROR: 'oops' tag doesn't exist")
         expect(status.exitstatus).to eq(1)
+      end
+    end
+
+    context "aliases" do
+      let(:command_name) { "uln" }
+
+      it "works" do
+        execute
       end
     end
   end

@@ -11,7 +11,8 @@ RSpec.describe "list", type: :integration do
       { file: test_path("otherrc"), tag: "other" }
     ]
   end
-  let(:command) { "#{bin_path} list #{options}" }
+  let(:command_name) { "list" }
+  let(:command) { "#{bin_path} #{command_name} #{options}" }
 
   include_context "integration"
 
@@ -69,6 +70,14 @@ RSpec.describe "list", type: :integration do
 
         expect(output.strip).to eq("#  No dotfiles are managed at the moment")
         expect(status.exitstatus).to eq(0)
+      end
+    end
+
+    context "aliases" do
+      let(:command_name) { "ls" }
+
+      it "works" do
+        execute
       end
     end
   end
