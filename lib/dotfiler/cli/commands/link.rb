@@ -75,7 +75,7 @@ module Dotfiler
             when :backup_and_overwrite
               backup(full_destination_path)
             else
-              terminate(:clean, message: "Cancelling...")
+              terminate!(:clean, message: "Cancelling...")
             end
           end
 

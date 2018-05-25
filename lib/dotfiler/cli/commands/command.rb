@@ -12,11 +12,11 @@ module Dotfiler
           rescue => exception
             case exception
             when Dotfiler::Error
-              shell.terminate(:error, message: exception.message)
+              error!(exception.message)
             when SystemCallError
               raise unless exception.class.name.start_with?("Errno::")
 
-              shell.terminate(:error, message: exception.message)
+              error!(exception.message)
             else
               raise
             end
@@ -28,10 +28,10 @@ module Dotfiler
         end
 
         def error!(message)
-          terminate(:error, message: message)
+          terminate!(:error, message: message)
         end
 
-        def terminate(*args)
+        def terminate!(*args)
           shell.terminate(*args)
         end
 
