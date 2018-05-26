@@ -19,6 +19,12 @@ module Dotfiler
       @data[tag]
     end
 
+    def each(&block)
+      @data.each do |tag, details|
+        yield(tag, details)
+      end
+    end
+
     def tags
       @data.keys
     end

@@ -2,10 +2,10 @@ module Dotfiler
   class Copier
     include Dotfiler::Import[fs: "file_system"]
 
-    def call(source, target)
+    def call(source, target, options = {})
       check_paths!(source, target.parent_dir)
 
-      fs.copy(source.to_s, target.to_s)
+      fs.copy(source.to_s, target.to_s, options)
 
       target.join(source.name)
     end
