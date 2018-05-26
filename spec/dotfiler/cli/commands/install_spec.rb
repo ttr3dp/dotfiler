@@ -21,11 +21,11 @@ RSpec.describe Dotfiler::CLI::Commands::Install, type: :cli do
 
   it_behaves_like "a command that handles errors", :to_path, path: ""
 
-  context "config file" do
-    context "when exists" do
+  context "when config file" do
+    context "exists" do
       before do
-        create_file(test_path(".dotfiler"), "dotfiles: #{test_path("some_path")}")
-        old_dotfiles_dir = create_dir(test_path("some_path"))
+        create_file(test_path(".dotfiler"), "dotfiles: #{test_path("old_dotfiles")}")
+        old_dotfiles_dir = create_dir(test_path("old_dotfiles"))
         create_file(test_path(old_dotfiles_dir + "/" + ".links"))
       end
 
@@ -38,11 +38,9 @@ RSpec.describe Dotfiler::CLI::Commands::Install, type: :cli do
       end
     end
 
-    context "when does not exist" do
+    context "does not exist" do
       it "creates configuration file" do
         command.call(options)
-
-        expect(test_path(".dotfiler")).to be_a_file
 
         config = File.read(test_path(".dotfiler"))
 
