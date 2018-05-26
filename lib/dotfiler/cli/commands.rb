@@ -3,6 +3,7 @@ require "hanami/cli"
 require "dotfiler/cli/commands/command"
 
 require "dotfiler/cli/commands/init"
+require "dotfiler/cli/commands/install"
 require "dotfiler/cli/commands/link"
 require "dotfiler/cli/commands/unlink"
 require "dotfiler/cli/commands/list"
@@ -15,6 +16,7 @@ module Dotfiler
       extend Hanami::CLI::Registry
 
       register "init",    Init
+      register "install", Install
       register "link",    Link,    aliases: ["ln"]
       register "unlink",  Unlink,  aliases: ["uln"]
       register "list",    List,    aliases: ["ls"]
