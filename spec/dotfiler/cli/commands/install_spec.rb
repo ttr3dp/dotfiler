@@ -21,14 +21,34 @@ RSpec.describe Dotfiler::CLI::Commands::Install, type: :cli do
 
   it_behaves_like "a command that handles errors", :to_path, path: ""
 
-  it "creates configuration file" do
-    command.call(options)
+  context "config file" do
+    context "when exists" do
+      before do
+        create_file(test_path(".dotfiler"), "dotfiles: #{test_path("some_path")}")
+        old_dotfiles_dir = create_dir(test_path("some_path"))
+        create_file(test_path(old_dotfiles_dir + "/" + ".links"))
+      end
 
-    expect(test_path(".dotfiler")).to be_a_file
+      it "updates dotfiles path" do
+        command.call(options)
 
-    config = File.read(test_path(".dotfiler"))
+        config = File.read(test_path(".dotfiler"))
 
-    expect(config).to eq("dotfiles: #{dotfiles_path}")
+        expect(config).to eq("dotfiles: #{dotfiles_path}")
+      end
+    end
+
+    context "when does not exist" do
+      it "creates configuration file" do
+        command.call(options)
+
+        expect(test_path(".dotfiler")).to be_a_file
+
+        config = File.read(test_path(".dotfiler"))
+
+        expect(config).to eq("dotfiles: #{dotfiles_path}")
+      end
+    end
   end
 
   it "creates symlinks" do

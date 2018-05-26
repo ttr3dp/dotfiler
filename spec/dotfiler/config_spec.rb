@@ -23,6 +23,25 @@ RSpec.describe Dotfiler::Config do
     end
   end
 
+  describe "#set" do
+    it "returns true if file exists, false otherwise" do
+      expect(config).not_to be_set
+
+      initial_setup
+
+      expect(config).to be_set
+    end
+  end
+
+  describe "#update!" do
+    it "updates config" do
+      initial_setup
+      config.update!(dotfiles: "changed_dotfiles")
+
+      expect(config[:dotfiles]).to eq("changed_dotfiles")
+    end
+  end
+
   context "config data" do
     it "loads on initialization" do
       initial_setup

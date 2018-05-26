@@ -50,7 +50,7 @@ RSpec.configure do |config|
     FileUtils.mkdir(TMP_DIR)
   end
 
-  config.around(:example) do |example|
+  config.around(:example, type: :cli) do |example|
     # Prevent RSpec from terminating early because of `exit` statement
     # `exit` is used in cli commands
     begin

@@ -41,6 +41,19 @@ module Dotfiler
       LINKS_FILE
     end
 
+    def reload!
+      @data = load_data
+    end
+
+    def update!(args = {})
+      new_data     = @data.merge(args).sort
+      file_content = YAML.dump(new_data)
+
+      fs.create_file(file_path.to_s, file_content)
+
+      reload!
+    end
+
     private
 
     def path(input, *opts)
