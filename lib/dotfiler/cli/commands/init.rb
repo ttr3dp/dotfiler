@@ -2,7 +2,7 @@ module Dotfiler
   module CLI
     module Commands
       class Init < Command
-        include Dotfiler::Import[fs: "file_system"]
+        include Dotfiler::Import["fs"]
 
         desc "Create initial configuration. Create dotfiles dir at specified path. Initialize git repo."
 
@@ -11,7 +11,7 @@ module Dotfiler
 
         def call(path:, **options)
           handle_errors do
-            dotfiles_path = to_path.call(path)
+            dotfiles_path = to_path.(path)
 
             create_config_file(config_file_contents(dotfiles_path))
             create_dotfiles_dir(dotfiles_path)

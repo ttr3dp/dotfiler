@@ -5,12 +5,7 @@ module Dotfiler
         BACKUP_DIR       = "dotfiler_installation_backup".freeze
         TIMESTAMP_FORMAT = "%Y_%m_%d_%H_%M_%S".freeze
 
-        include Dotfiler::Import[
-          fs: "file_system",
-          links: "links",
-          mover: "mover",
-          symlinker: "symlinker"
-        ]
+        include Dotfiler::Import[ "fs", "links", "mover", "symlinker"]
 
         argument :path, required: true, desc: "Path to existing dotfiles directory"
 

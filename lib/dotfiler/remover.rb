@@ -1,6 +1,6 @@
 module Dotfiler
   class Remover
-    include Dotfiler::Import[fs: "file_system"]
+    include Dotfiler::Import["fs"]
 
     def call(path, only_symlinks: true)
       if only_symlinks && !path.symlink?

@@ -1,6 +1,6 @@
 module Dotfiler
   class Symlinker
-    include Dotfiler::Import[fs: "file_system"]
+    include Dotfiler::Import["fs"]
 
     def call(source, link_path, options = {})
       check_paths!(source, link_path.parent_dir)

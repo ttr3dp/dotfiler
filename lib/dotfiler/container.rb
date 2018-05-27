@@ -9,7 +9,7 @@ module Dotfiler
       Dotfiler::Path.method(:new)
     end
 
-    register "file_system", memoize: true do
+    register "fs", memoize: true do
       Dotfiler::FileSystem.new
     end
 

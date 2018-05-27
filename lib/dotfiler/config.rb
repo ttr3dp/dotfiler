@@ -6,7 +6,7 @@ module Dotfiler
     LINKS_FILE         = ".links".freeze
     RELATIVE_HOME_PATH = "~".freeze
 
-    include Dotfiler::Import[fs: "file_system", to_path: "to_path"]
+    include Dotfiler::Import["fs", "to_path"]
 
     def initialize(*args)
       super
@@ -57,7 +57,7 @@ module Dotfiler
     private
 
     def path(input, *opts)
-      to_path.call(input, *opts)
+      to_path.(input, *opts)
     end
 
     def load_data

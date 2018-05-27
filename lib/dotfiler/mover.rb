@@ -1,6 +1,6 @@
 module Dotfiler
   class Mover
-    include Dotfiler::Import[fs: "file_system"]
+    include Dotfiler::Import["fs"]
 
     def call(source, target, options = { secure: true })
       check_paths!(source, target.parent_dir)

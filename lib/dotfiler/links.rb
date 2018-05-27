@@ -3,7 +3,7 @@ require "forwardable"
 module Dotfiler
   class Links
     extend Forwardable
-    include Dotfiler::Import[fs: "file_system", config: "config", to_path: "to_path"]
+    include Dotfiler::Import["fs", "config", "to_path"]
 
     HOME_PLACEHOLDER     = "%home%".freeze
     DOTFILES_PLACEHOLDER = "%dotfiles%".freeze
