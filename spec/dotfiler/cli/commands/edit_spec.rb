@@ -18,8 +18,8 @@ RSpec.describe Dotfiler::CLI::Commands::Edit, type: :cli do
 
   it_behaves_like "a command that handles errors", :links, { tag: "" }
 
-  it "opens the editor" do
-    allow(command).to receive(:editor).and_return("vim")
+  it "opens the dotfiles in  $EDITOR" do
+    allow(command).to receive(:default_editor).and_return("vim")
 
     expect(fs).to receive(:execute).with("vim", "#{test_path("dotfiles/test")}")
 
@@ -34,15 +34,30 @@ RSpec.describe Dotfiler::CLI::Commands::Edit, type: :cli do
     end
   end
 
-  context "when editor is not set" do
-    it "terminates with code 1 and error message" do
-      allow(command).to receive(:editor).and_return(nil)
+  context "editor" do
+    context "when $EDITOR is not set" do
+      it "terminates with code 1 and error message" do
+        allow(command).to receive(:default_editor).and_return(nil)
 
-      expect(shell).to receive(:terminate).with(
-        :error,
-        message: "Editor is not configured. Please set $EDITOR environment variable on your system").and_call_original
+        expect(shell).to receive(:terminate).with(
+          :error,
+          message: "Editor is not specified. Either set the '$EDITOR' environment variable or provide '--with' option"
+        ).and_call_original
 
-      expect(command.call(args)).to terminate.with_code(1)
+        expect(command.call(args)).to terminate.with_code(1)
+      end
+    end
+
+    context "when --with option is provided" do
+      let(:args) { { tag: tag, with: "emacs" } }
+
+      it "uses the specified editor" do
+        allow(command).to receive(:default_editor).and_return(nil)
+
+        expect(fs).to receive(:execute).with("emacs", "#{test_path("dotfiles/test")}")
+
+        command.call(args)
+      end
     end
   end
 end
