@@ -11,7 +11,7 @@ module Dotfiler
         def call(tags: nil)
           handle_errors do
             if links.list.empty?
-              shell.terminate(:info, message: "No dotfiles are managed at the moment")
+              terminate!(:info, message: "No dotfiles are managed at the moment")
             else
               content = generate_list(tags_only: !tags.nil?)
               shell.print(content)

@@ -5,7 +5,7 @@ module Dotfiler
         desc "Show version"
 
         def call(*)
-          shell.print("dotfiler #{Dotfiler::VERSION}")
+          print("dotfiler #{Dotfiler::VERSION}")
         end
       end
     end

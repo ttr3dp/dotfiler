@@ -23,8 +23,12 @@ module Dotfiler
           end
         end
 
+        def print(*args)
+          shell.print(*args)
+        end
+
         def info(message)
-          shell.print(message, :info)
+          print(message, :info)
         end
 
         def error!(message)
