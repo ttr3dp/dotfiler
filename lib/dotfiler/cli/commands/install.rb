@@ -7,6 +7,8 @@ module Dotfiler
 
         include Dotfiler::Import[ "fs", "links", "mover", "symlinker"]
 
+        desc "Install dotfiles from existing dotfiles directory"
+
         argument :path, required: true, desc: "Path to existing dotfiles directory"
 
         def call(path: , **options)

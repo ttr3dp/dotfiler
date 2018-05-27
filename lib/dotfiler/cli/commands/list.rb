@@ -4,7 +4,7 @@ module Dotfiler
       class List < Command
         include Dotfiler::Import["links"]
 
-        desc "Lists all managed dotfiles"
+        desc "List all managed dotfiles"
 
         argument :tags, desc: "List tags only"
 
