@@ -32,6 +32,7 @@ module Dotfiler
     def tag_taken?(tag)
       tags.include?(tag)
     end
+    alias_method :tag_exists?, :tag_taken?
 
     def append!(tag, info)
       File.open(config.links_file_path.to_s, "a") do |file|

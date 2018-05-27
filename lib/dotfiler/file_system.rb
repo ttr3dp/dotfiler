@@ -37,7 +37,7 @@ module Dotfiler
     def execute(command, *command_options, **options)
       full_command = ([command] + command_options).join(" ")
 
-      options[:capture] == true ?  `#{full_command}` : system(full_command)
+      options[:capture] == true ? `#{full_command}` : system(full_command)
     end
   end
 end
