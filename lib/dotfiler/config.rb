@@ -34,7 +34,7 @@ module Dotfiler
     end
 
     def dotfiles_file_path
-      @_dotfiles_file_path = path(self[:dotfiles]).join(dotfiles_file_name) if set?
+      path(self[:dotfiles]).join(dotfiles_file_name) if set?
     end
 
     def dotfiles_file_name
@@ -47,7 +47,9 @@ module Dotfiler
 
     def update!(args = {})
       new_data     = @data.merge(args).sort
-      file_content = YAML.dump(new_data)
+      file_content = ""
+
+      new_data.each { |k, v| file_content += "#{k}: #{v}" }
 
       fs.create_file(file_path.to_s, file_content)
 

@@ -18,8 +18,6 @@ RSpec.describe Dotfiler::CLI::Commands::Install, type: :cli do
     create_file(dotfiles_file_path, dotfiles_file_content)
   end
 
-  it_behaves_like "a command that handles errors", :to_path, path: ""
-
   context "when config file" do
     context "exists" do
       before do

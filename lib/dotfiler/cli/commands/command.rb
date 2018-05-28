@@ -9,17 +9,8 @@ module Dotfiler
         def handle_errors(&block)
           begin
             yield
-          rescue => exception
-            case exception
-            when Dotfiler::Error
-              error!(exception.message)
-            when SystemCallError
-              raise unless exception.class.name.start_with?("Errno::")
-
-              error!(exception.message)
-            else
-              raise
-            end
+          rescue Dotfiler::Error => e
+            error!(e.message)
           end
         end
 

@@ -23,7 +23,7 @@ module Dotfiler
             dotfiles.config.reload!
             dotfiles.reload!
 
-            create_symdotfiles
+            create_symlinks
           end
         end
 
@@ -38,14 +38,10 @@ module Dotfiler
         end
 
         def configure_dotfiles_dir(dotfiles_path)
-          if config.set?
-            config.update!(dotfiles: "dotfiles: #{dotfiles_path.to_s}")
-          else
-            fs.create_file(config.file_path.to_s, "dotfiles: #{dotfiles_path.to_s}")
-          end
+          config.update!(dotfiles: dotfiles_path.to_s)
         end
 
-        def create_symdotfiles
+        def create_symlinks
           dotfiles.each do |dotfile|
             backup(dotfile.link) if dotfile.link.exists? && !dotfile.link.symlink?
 
