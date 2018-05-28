@@ -10,11 +10,11 @@ RSpec.describe Dotfiler::CLI::Commands::Unlink, type: :cli do
   before do
     initial_setup
     create_file("foo")
-    Dotfiler::CLI::Commands::Link.new(command_name: "link").call(tag: "foo", path: file)
-    command.call(tag: "foo")
+    Dotfiler::CLI::Commands::Link.new(command_name: "link").call(name: "foo", path: file)
+    command.call(name: "foo")
   end
 
-  it_behaves_like "a command that handles errors", :links, tag: "bar"
+  it_behaves_like "a command that handles errors", :dotfiles, name: "bar"
 
   it "removes symlink" do
     expect(file).not_to be_a_symlink
@@ -29,14 +29,14 @@ RSpec.describe Dotfiler::CLI::Commands::Unlink, type: :cli do
     expect(File.read(dotfiles_path(".links"))).to eq("")
   end
 
-  context "when tag does not exist" do
+  context "when name does not exist" do
     it "outputs error" do
-      expect(shell).to receive(:print).with("'oops' tag doesn't exist", :error)
-      command.call(tag: "oops")
+      expect(shell).to receive(:print).with("Dotfile with the name 'oops' does not exist", :error)
+      command.call(name: "oops")
     end
 
     it "exits with code 1" do
-      expect{ command.call(tag: "oops") }.to terminate.with_code(1)
+      expect{ command.call(name: "oops") }.to terminate.with_code(1)
     end
   end
 end

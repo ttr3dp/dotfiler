@@ -2,17 +2,17 @@ module Dotfiler
   module CLI
     module Commands
       class Link < Command
-        include Dotfiler::Import["links", "symlinker", "mover"]
+        include Dotfiler::Import["dotfiles", "symlinker", "mover"]
 
         desc "Add specified file/dir to dotfiles"
 
-        argument :tag,    required: true,  desc: "Dotfile tag"
-        argument :path,   required: true,  desc: "Dotfile path"
+        argument :name,   required: true,  desc: "Dotfile name"
+        argument :path,   required: true,  desc: "File/dir path"
         option   :target, required: false, desc: "Path to where the symlink will be created", aliases: ["-t"]
 
-        def call(tag:, path:, **options)
+        def call(name:, path:, **options)
           handle_errors do
-            validate_tag!(tag)
+            validate_name!(name)
 
             path          = to_path.(path)
             dotfiles_path = to_path.(config[:dotfiles])
@@ -22,17 +22,17 @@ module Dotfiler
             info("Symlinking dotfile (#{dotfile_path}) to #{target_path}...")
             symlink_path  = symlinker.call(dotfile_path, target_path)
 
-            info("Adding #{tag} to Dotfiler links...")
-            links.append!(tag, link: symlink_path.to_s, path: dotfile_path.to_s)
+            info("Adding #{name} to Dotfiler links...")
+            dotfiles.add!(name: name, link: symlink_path.to_s, path: dotfile_path.to_s)
           end
         end
 
         private
 
-        def validate_tag!(tag)
-          return unless links.tag_taken?(tag)
+        def validate_name!(name)
+          return unless dotfiles.name_taken?(name)
 
-          error!("'#{tag}' tag already exists")
+          error!("Dotfile with the name '#{name}' already exists")
         end
 
         def resolve_dotfile_path(path, dotfiles_path, options)

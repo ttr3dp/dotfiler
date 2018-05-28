@@ -21,6 +21,14 @@ module TestPathHelper
     pathname.join(path).to_s
   end
 
+  def links_path(path = nil)
+    pathname = Pathname.new(dotfiles_path(".links"))
+
+    return pathname.to_s unless path
+
+    pathname.join(path).to_s
+  end
+
   def to_test_path(string)
     Dotfiler.resolve["to_path"].call(test_path(string))
   end

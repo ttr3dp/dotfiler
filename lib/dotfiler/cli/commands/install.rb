@@ -5,7 +5,7 @@ module Dotfiler
         BACKUP_DIR       = "dotfiler_installation_backup".freeze
         TIMESTAMP_FORMAT = "%Y_%m_%d_%H_%M_%S".freeze
 
-        include Dotfiler::Import[ "fs", "links", "mover", "symlinker"]
+        include Dotfiler::Import[ "fs", "dotfiles", "mover", "symlinker"]
 
         desc "Install dotfiles from existing dotfiles directory"
 
@@ -20,8 +20,8 @@ module Dotfiler
             configure_dotfiles_dir(dotfiles_path)
 
             config.reload!
-            links.config.reload!
-            links.reload!
+            dotfiles.config.reload!
+            dotfiles.reload!
 
             create_symlinks
           end
@@ -46,13 +46,11 @@ module Dotfiler
         end
 
         def create_symlinks
-          links.each do |tag, details|
-            link_path, path = details.values_at(:link, :path).map { |item| to_path.(item) }
+          dotfiles.each do |dotfile|
+            backup(dotfile.link) if dotfile.link.exists? && !dotfile.link.symlink?
 
-            backup(link_path) if link_path.exists? && !link_path.symlink?
-
-            info("Symlinking dotfile (#{path}) to #{link_path}...")
-            symlinker.call(path, link_path, force: true)
+            info("Symlinking dotfile (#{dotfile.path}) to #{dotfile.link}...")
+            symlinker.call(dotfile.path, dotfile.link, force: true)
           end
         end
 

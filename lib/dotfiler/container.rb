@@ -17,8 +17,8 @@ module Dotfiler
       Dotfiler::Config.new
     end
 
-    register "links", memoize: false do
-      Dotfiler::Links.new
+    register "dotfiles", memoize: false do
+      Dotfiler::Dotfiles.new
     end
 
     register "copier", memoize: true do
@@ -48,7 +48,7 @@ end
 require "dotfiler/path"
 require "dotfiler/file_system"
 require "dotfiler/config"
-require "dotfiler/links"
+require "dotfiler/dotfiles"
 
 require "dotfiler/copier"
 require "dotfiler/mover"

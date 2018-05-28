@@ -8,13 +8,13 @@ RSpec.describe Dotfiler::CLI::Commands::List, type: :cli do
 
   before do
     initial_setup
-    links = %w(foo bar baz).each_with_object([]) do |dot, result|
-      result << { tag: dot, link: test_path(dot), path: dotfiles_path("#{dot}") }
+    dotfiles = %w(foo bar baz).each_with_object([]) do |dot, result|
+      result << { name: dot, link: test_path(dot), path: dotfiles_path("#{dot}") }
     end
-    add_links(links)
+    add_dotfiles(dotfiles)
   end
 
-  it_behaves_like "a command that handles errors", :links
+  it_behaves_like "a command that handles errors", :dotfiles
 
   it "lists all links" do
     expected_output = <<-EOF
@@ -37,12 +37,12 @@ RSpec.describe Dotfiler::CLI::Commands::List, type: :cli do
     command.call
   end
 
-  it "lists tags only" do
+  it "lists names only" do
     expected_output = "  foo\n  bar\n  baz\n"
 
     expect(shell).to receive(:print).with(expected_output)
 
-    command.call(tags: "tags")
+    command.call(names: true)
   end
 
   context "when there are no links" do

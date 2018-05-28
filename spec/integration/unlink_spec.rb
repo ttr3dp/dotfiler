@@ -5,10 +5,10 @@ require "spec_helper"
 require "support/shared/examples/initialization_guard_examples"
 
 RSpec.describe "unlink", type: :integration do
-  let(:tag) { "test" }
+  let(:name) { "test" }
   let(:file) { test_path("testrc") }
   let(:command_name) { "unlink" }
-  let(:command) { "#{bin_path} #{command_name} #{tag}" }
+  let(:command) { "#{bin_path} #{command_name} #{name}" }
 
   include_context "integration"
 
@@ -18,28 +18,28 @@ RSpec.describe "unlink", type: :integration do
     before do
       `#{bin_path} init #{dotfiles_path}`
       create_file(file)
-      `#{bin_path} link #{tag} #{file}`
+      `#{bin_path} link #{name} #{file}`
     end
 
     specify "output" do
       expected_output = <<-EOF
 #  Removing symlink (#{file})...
 #  Restoring dotfile (#{dotfiles_path + "/testrc"}) to its original location (#{file})...
-#  Removing '#{tag}' from Dotfiler links...
+#  Removing '#{name}' from Dotfiler links...
       EOF
 
       expect(execute).to eq(expected_output)
     end
 
-    context "when tag does not exist" do
-      let(:tag) { "oops" }
+    context "when name does not exist" do
+      let(:name) { "oops" }
 
       it "outputs error" do
         execute # unlink file from before block
 
         _output, error, status = Open3.capture3(command)
 
-        expect(error.strip).to eq("ERROR: 'oops' tag doesn't exist")
+        expect(error.strip).to eq("ERROR: Dotfile with the name 'oops' does not exist")
         expect(status.exitstatus).to eq(1)
       end
     end

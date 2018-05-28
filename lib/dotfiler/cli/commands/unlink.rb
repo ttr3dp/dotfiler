@@ -2,42 +2,36 @@ module Dotfiler
   module CLI
     module Commands
       class Unlink < Command
-        include Dotfiler::Import["links", "mover", "remover"]
+        include Dotfiler::Import["dotfiles", "mover", "remover"]
 
         desc "Unlink specified dotfile and restore it to original location"
 
-        argument :tag, required: true, desc: "dotfile tag"
+        argument :name, required: true, desc: "Dotfile name"
 
-        def call(tag:)
+        def call(name:)
           handle_errors do
-            validate_tag!(tag)
+            validate_name!(name)
 
-            symlink_path, dotfile_path = links[tag].values_at(:link, :path).map do |item|
-              to_path.(item)
-            end
+            dotfile = dotfiles.find(name)
 
-            info("Removing symlink (#{symlink_path})...")
-            remover.call(symlink_path)
+            info("Removing symlink (#{dotfile.link})...")
+            remover.call(dotfile.link)
 
-            info("Restoring dotfile (#{dotfile_path}) to its original location (#{symlink_path})...")
-            mover.call(dotfile_path, symlink_path)
+            info("Restoring dotfile (#{dotfile.path}) to its original location (#{dotfile.link})...")
+            mover.call(dotfile.path, dotfile.link)
 
 
-            info("Removing '#{tag}' from Dotfiler links...")
-            links.remove!(tag)
+            info("Removing '#{name}' from Dotfiler links...")
+            dotfiles.remove!(name)
           end
         end
 
         private
 
-        def validate_tag!(tag)
-          return if tag_exists?(tag)
+        def validate_name!(name)
+          return if dotfiles.exists?(name)
 
-          shell.terminate(:error, message: "'#{tag}' tag doesn't exist")
-        end
-
-        def tag_exists?(tag)
-          links.tags.include?(tag)
+          shell.terminate(:error, message: "Dotfile with the name '#{name}' does not exist")
         end
       end
     end

@@ -5,11 +5,11 @@ require "support/shared/examples/cli_error_handler_example"
 RSpec.describe Dotfiler::CLI::Commands::Link, type: :cli do
   let(:shell) { Dotfiler::Shell.new }
   let(:command) { described_class.new(command_name: "link", shell: shell) }
-  let(:file) { test_path("foo") }
-  let(:tag) { "foo" }
+  let(:name) { "foo" }
+  let(:file) { test_path(name) }
   let(:path) { file }
   let(:options) { {} }
-  let(:args) { { tag: tag, path: path }.merge(options) }
+  let(:args) { { name: name, path: path }.merge(options) }
 
   before do
     initial_setup
@@ -17,7 +17,7 @@ RSpec.describe Dotfiler::CLI::Commands::Link, type: :cli do
     command.call(args)
   end
 
-  it_behaves_like "a command that handles errors", :to_path, tag: "oops", path: ""
+  it_behaves_like "a command that handles errors", :to_path, name: "oops", path: ""
 
   it "moves file to dotfiles dir" do
     expect(dotfiles_path("foo")).to be_a_file
@@ -57,15 +57,15 @@ RSpec.describe Dotfiler::CLI::Commands::Link, type: :cli do
     end
   end
 
-  context "when tag already exists" do
+  context "when name already exists" do
     it "outputs error" do
-      expect(shell).to receive(:print).with("'foo' tag already exists", :error)
+      expect(shell).to receive(:print).with("Dotfile with the name 'foo' already exists", :error)
 
       command.call(args)
     end
 
     it "exits with code 1" do
-      expect{ command.call(tag: "foo", path: "") }.to terminate.with_code(1)
+      expect{ command.call(name: "foo", path: "") }.to terminate.with_code(1)
     end
   end
 
@@ -91,7 +91,7 @@ RSpec.describe Dotfiler::CLI::Commands::Link, type: :cli do
         available_options
       )
 
-      command.call(tag: "test", path: test_path("test"))
+      command.call(name: "test", path: test_path("test"))
     end
 
     context "answer" do
@@ -99,7 +99,7 @@ RSpec.describe Dotfiler::CLI::Commands::Link, type: :cli do
         it "overwrites dotfile" do
           allow(input).to receive(:gets).and_return("1")
 
-          command.call(tag: "test", path: test_path("test"))
+          command.call(name: "test", path: test_path("test"))
 
           expect(File.read(dotfiles_path("test"))).to eq("new test")
         end
@@ -109,7 +109,7 @@ RSpec.describe Dotfiler::CLI::Commands::Link, type: :cli do
         it "backs up and overwrites dotfile" do
           allow(input).to receive(:gets).and_return("2")
 
-          command.call(tag: "test", path: test_path("test"))
+          command.call(name: "test", path: test_path("test"))
 
           expect(File.read(dotfiles_path("test_old"))).to eq("old test")
           expect(File.read(dotfiles_path("test"))).to eq("new test")
@@ -120,7 +120,7 @@ RSpec.describe Dotfiler::CLI::Commands::Link, type: :cli do
         it "cancels" do
           allow(input).to receive(:gets).and_return("3")
 
-          expect(command.call(tag: "test", path: test_path("test"))).to terminate.with_code(0)
+          expect(command.call(name: "test", path: test_path("test"))).to terminate.with_code(0)
         end
       end
 
@@ -128,7 +128,7 @@ RSpec.describe Dotfiler::CLI::Commands::Link, type: :cli do
         it "cancels" do
           allow(input).to receive(:gets).and_return("oops")
 
-          expect(command.call(tag: "test", path: test_path("test"))).to terminate.with_code(0)
+          expect(command.call(name: "test", path: test_path("test"))).to terminate.with_code(0)
         end
       end
     end

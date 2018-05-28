@@ -5,10 +5,10 @@ require "spec_helper"
 require "support/shared/examples/initialization_guard_examples"
 
 RSpec.describe "list", type: :integration do
-  let(:links) do
+  let(:dotfiles) do
     [
-      { file: test_path("testrc"), tag: "test" },
-      { file: test_path("otherrc"), tag: "other" }
+      { file: test_path("testrc"), name: "test" },
+      { file: test_path("otherrc"), name: "other" }
     ]
   end
   let(:command_name) { "list" }
@@ -21,9 +21,9 @@ RSpec.describe "list", type: :integration do
   context "when initialized" do
     before do
       `#{bin_path} init #{dotfiles_path}`
-      links.each do |link|
-        create_file(link[:file])
-        `#{bin_path} link #{link[:tag]} #{link[:file]}`
+      dotfiles.each do |dotfile|
+        create_file(dotfile[:file])
+        `#{bin_path} link #{dotfile[:name]} #{dotfile[:file]}`
       end
     end
 
@@ -44,10 +44,10 @@ RSpec.describe "list", type: :integration do
       expect(output).to eq(expected_output)
     end
 
-    context "with tags argument" do
-      let(:options) { "tags" }
+    context "with names argument" do
+      let(:options) { "names" }
 
-      it "lists tags only" do
+      it "lists names only" do
         expected_output = "  test\n  other\n"
 
         output = Open3.capture3(command).first
@@ -58,8 +58,8 @@ RSpec.describe "list", type: :integration do
 
     context "when there are no links" do
       before do
-        links.each do |link|
-          `#{bin_path} unlink #{link[:tag]}`
+        dotfiles.each do |dotfiles|
+          `#{bin_path} unlink #{dotfiles[:name]}`
         end
       end
 

@@ -2,17 +2,18 @@ module Dotfiler
   module CLI
     module Commands
       class Edit < Command
-        include Dotfiler::Import["fs", "links"]
+        include Dotfiler::Import["fs", "dotfiles"]
 
         desc "Edit specified dotfile with $EDITOR"
 
+        argument :name, required: true, desc: "Name of the dotfile you want to edit"
         option :with, aliases: ["w"], required: false, desc: "Editor in which to open the specified dotfile"
 
-        def call(tag:, **options)
+        def call(name:, **options)
           handle_errors do
-            validate_tag!(tag)
+            validate_name!(name)
 
-            dotfile_path = links[tag].fetch(:path)
+            dotfile_path = dotfiles.find(name).path.to_s
             editor       = options.fetch(:with, default_editor)
 
             error!("Editor is not specified. Either set the '$EDITOR' environment variable or provide '--with' option") unless editor
@@ -23,8 +24,8 @@ module Dotfiler
 
         private
 
-        def validate_tag!(tag)
-          error!("Tag '#{tag}' not found") unless links.tag_exists?(tag)
+        def validate_name!(name)
+          error!("Dotfile '#{name}' not found") unless dotfiles.exists?(name)
         end
 
         def default_editor

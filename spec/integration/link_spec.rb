@@ -5,10 +5,10 @@ require "spec_helper"
 require "support/shared/examples/initialization_guard_examples"
 
 RSpec.describe "link", type: :integration do
-  let(:tag) { "test" }
+  let(:name) { "test" }
   let(:file) { test_path("testrc") }
   let(:command_name) { "link" }
-  let(:command) { "#{bin_path} #{command_name} #{tag} #{file} #{options}" }
+  let(:command) { "#{bin_path} #{command_name} #{name} #{file} #{options}" }
 
   include_context "integration"
 
@@ -24,7 +24,7 @@ RSpec.describe "link", type: :integration do
       expected_output = <<-EOF
 #  Moving #{file} to dotfiles (#{dotfiles_path})...
 #  Symlinking dotfile (#{dotfiles_path("testrc")}) to #{file}...
-#  Adding #{tag} to Dotfiler links...
+#  Adding #{name} to Dotfiler links...
       EOF
 
       expect(execute).to eq(expected_output)
@@ -55,13 +55,13 @@ RSpec.describe "link", type: :integration do
       end
     end
 
-    context "when tag already exists" do
+    context "when name already exists" do
       before { execute }
 
       it "outputs error" do
         _output, error, status = Open3.capture3(command)
 
-        expect(error.strip).to eq("ERROR: 'test' tag already exists")
+        expect(error.strip).to eq("ERROR: Dotfile with the name 'test' already exists")
         expect(status.exitstatus).to eq(1)
       end
     end

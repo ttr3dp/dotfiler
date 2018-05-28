@@ -66,11 +66,9 @@ RSpec.configure do |config|
   end
 
   # Helper method for easier links appending
-  def add_links(links)
-    link_list = Dotfiler.resolve["links"]
+  def add_dotfiles(dotfile_params)
+    dotfiles = Dotfiler.resolve["dotfiles"]
 
-    links.each do |item|
-      link_list.append!(item[:tag], link: item[:link], path: item[:path])
-    end
+    dotfile_params.each { |params| dotfiles.add!(params) }
   end
 end
