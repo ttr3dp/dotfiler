@@ -31,13 +31,13 @@ RSpec.describe "unlink", type: :integration do
       execute
 
       expect(file).to be_a_file
-      expect(test_path("dotfiles/test")).not_to be_a_file
+      expect(dotfiles_path("test")).not_to be_a_file
     end
 
     it "removes link from links file" do
       execute
 
-      expect(File.read(test_path("dotfiles/.links"))).to eq("")
+      expect(File.read(dotfiles_path(".links"))).to eq("")
     end
 
     it "outputs info for each operation" do

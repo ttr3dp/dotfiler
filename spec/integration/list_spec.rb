@@ -33,11 +33,11 @@ RSpec.describe "list", type: :integration do
       expected_output = <<-EOF
   test
     - LINK: #{test_path("testrc")}
-    - PATH: #{test_path("dotfiles/testrc")}
+    - PATH: #{dotfiles_path("testrc")}
 
   other
     - LINK: #{test_path("otherrc")}
-    - PATH: #{test_path("dotfiles/otherrc")}
+    - PATH: #{dotfiles_path("otherrc")}
 
       EOF
 

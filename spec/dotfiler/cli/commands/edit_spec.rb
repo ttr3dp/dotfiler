@@ -12,16 +12,16 @@ RSpec.describe Dotfiler::CLI::Commands::Edit, type: :cli do
   before do
     initial_setup
     add_links([
-      { tag: tag, link: test_path(tag), path: test_path("dotfiles/#{tag}") }
+      { tag: tag, link: test_path(tag), path: dotfiles_path(tag) }
     ])
   end
 
   it_behaves_like "a command that handles errors", :links, { tag: "" }
 
-  it "opens the dotfiles in  $EDITOR" do
+  it "opens the dotfile in $EDITOR" do
     allow(command).to receive(:default_editor).and_return("vim")
 
-    expect(fs).to receive(:execute).with("vim", "#{test_path("dotfiles/test")}")
+    expect(fs).to receive(:execute).with("vim", "#{dotfiles_path("test")}")
 
     command.call(args)
   end
@@ -54,7 +54,7 @@ RSpec.describe Dotfiler::CLI::Commands::Edit, type: :cli do
       it "uses the specified editor" do
         allow(command).to receive(:default_editor).and_return(nil)
 
-        expect(fs).to receive(:execute).with("emacs", "#{test_path("dotfiles/test")}")
+        expect(fs).to receive(:execute).with("emacs", "#{dotfiles_path("test")}")
 
         command.call(args)
       end

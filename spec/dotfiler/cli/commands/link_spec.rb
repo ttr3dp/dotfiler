@@ -20,15 +20,15 @@ RSpec.describe Dotfiler::CLI::Commands::Link, type: :cli do
   it_behaves_like "a command that handles errors", :to_path, tag: "oops", path: ""
 
   it "moves file to dotfiles dir" do
-    expect(test_path("dotfiles/foo")).to be_a_file
+    expect(dotfiles_path("foo")).to be_a_file
   end
 
   it "creates symlink" do
-    expect(file).to be_a_symlink_of(test_path("dotfiles/foo"))
+    expect(file).to be_a_symlink_of(dotfiles_path("foo"))
   end
 
   it "appends link to links file" do
-    links_file_content = File.read(test_path("dotfiles/.links"))
+    links_file_content = File.read(dotfiles_path(".links"))
 
     expect(links_file_content).to eq(
       "foo :: %home%/foo :: %dotfiles%/foo\n"
@@ -39,18 +39,18 @@ RSpec.describe Dotfiler::CLI::Commands::Link, type: :cli do
     let(:options) { { target: test_path("dot_foo") } }
 
     it "symlinks to specified target" do
-      expect(test_path("dot_foo")).to be_a_symlink_of(test_path("dotfiles/foo"))
+      expect(test_path("dot_foo")).to be_a_symlink_of(dotfiles_path("foo"))
     end
   end
 
   context "when item is already in dotfiles dir" do
-    let(:file) { test_path("dotfiles/bar") }
+    let(:file) { dotfiles_path("bar") }
 
     context "without target option" do
       it "exits with error message and code 1 if target option is not provided" do
         expect(shell).to receive(:terminate).with(
           :error,
-          message: "Specified file (#{file}) is already in dotfiles directory (#{test_path("dotfiles")}).\nIf you want to symlink it, please provide `--target` option"
+          message: "Specified file (#{file}) is already in dotfiles directory (#{dotfiles_path}).\nIf you want to symlink it, please provide `--target` option"
         )
         expect{ command.call(args) }.to terminate.with_code(1)
       end
@@ -75,7 +75,7 @@ RSpec.describe Dotfiler::CLI::Commands::Link, type: :cli do
     let(:shell) { Dotfiler::Shell.new(input: input, output: output) }
 
     before do
-      create_file(test_path("dotfiles/test"), "old test")
+      create_file(dotfiles_path("test"), "old test")
       create_file(test_path("test"), "new test")
     end
 
@@ -87,7 +87,7 @@ RSpec.describe Dotfiler::CLI::Commands::Link, type: :cli do
       }
 
       expect(shell).to receive(:prompt).with(
-        "Dotfile (#{test_path("dotfiles/test")}) already exists.\nWould you like to:",
+        "Dotfile (#{dotfiles_path("test")}) already exists.\nWould you like to:",
         available_options
       )
 
@@ -101,7 +101,7 @@ RSpec.describe Dotfiler::CLI::Commands::Link, type: :cli do
 
           command.call(tag: "test", path: test_path("test"))
 
-          expect(File.read(test_path("dotfiles/test"))).to eq("new test")
+          expect(File.read(dotfiles_path("test"))).to eq("new test")
         end
       end
 
@@ -111,8 +111,8 @@ RSpec.describe Dotfiler::CLI::Commands::Link, type: :cli do
 
           command.call(tag: "test", path: test_path("test"))
 
-          expect(File.read(test_path("dotfiles/test_old"))).to eq("old test")
-          expect(File.read(test_path("dotfiles/test"))).to eq("new test")
+          expect(File.read(dotfiles_path("test_old"))).to eq("old test")
+          expect(File.read(dotfiles_path("test"))).to eq("new test")
         end
       end
 

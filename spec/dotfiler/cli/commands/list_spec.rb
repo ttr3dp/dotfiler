@@ -9,7 +9,7 @@ RSpec.describe Dotfiler::CLI::Commands::List, type: :cli do
   before do
     initial_setup
     links = %w(foo bar baz).each_with_object([]) do |dot, result|
-      result << { tag: dot, link: test_path(dot), path: test_path("dotfiles/#{dot}") }
+      result << { tag: dot, link: test_path(dot), path: dotfiles_path("#{dot}") }
     end
     add_links(links)
   end
@@ -20,15 +20,15 @@ RSpec.describe Dotfiler::CLI::Commands::List, type: :cli do
     expected_output = <<-EOF
   foo
     - LINK: #{test_path("foo")}
-    - PATH: #{test_path("dotfiles/foo")}
+    - PATH: #{dotfiles_path("foo")}
 
   bar
     - LINK: #{test_path("bar")}
-    - PATH: #{test_path("dotfiles/bar")}
+    - PATH: #{dotfiles_path("bar")}
 
   baz
     - LINK: #{test_path("baz")}
-    - PATH: #{test_path("dotfiles/baz")}
+    - PATH: #{dotfiles_path("baz")}
 
     EOF
 
@@ -47,7 +47,7 @@ RSpec.describe Dotfiler::CLI::Commands::List, type: :cli do
 
   context "when there are no links" do
     before do
-      File.open(test_path("dotfiles/.links"), "w+") { |f| f << "" }
+      File.open(dotfiles_path(".links"), "w+") { |f| f << "" }
     end
 
     it "outputs message" do

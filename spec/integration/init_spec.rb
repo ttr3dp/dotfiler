@@ -14,25 +14,25 @@ RSpec.describe "init", type: :integration do
 
     config = File.read(test_path(".dotfiler"))
 
-    expect(config).to eq("dotfiles: #{test_path("dotfiles")}")
+    expect(config).to eq("dotfiles: #{dotfiles_path}")
   end
 
   it "creates dotfiles directory" do
     execute
 
-    expect(test_path("dotfiles")).to be_a_directory
+    expect(dotfiles_path).to be_a_directory
   end
 
   it "creates links file" do
     execute
 
-    expect(test_path("dotfiles/.links")).to be_a_file
+    expect(dotfiles_path(".links")).to be_a_file
   end
 
   it "initializes git repo at dotfiles directory" do
     execute
 
-    expect(test_path("dotfiles/.git")).to be_a_directory
+    expect(dotfiles_path(".git")).to be_a_directory
   end
 
   it "outputs steps info" do
@@ -53,7 +53,7 @@ RSpec.describe "init", type: :integration do
       it "skips git repo initialization" do
         execute
 
-        expect(test_path("dotfiles/.git")).not_to be_a_directory
+        expect(dotfiles_path(".git")).not_to be_a_directory
       end
     end
   end
@@ -72,9 +72,9 @@ RSpec.describe "init", type: :integration do
     end
 
     it "allows you to overwrite dotfiles dir" do
-      overwrite_message = "Dotfiles directory (#{test_path("dotfiles")}) already exists. Would you like to overwrite it? [y/N]"
-      remove_message    = "#  Removing existing dotfiles directory (#{test_path("dotfiles")})..."
-      create_message    = "#  Creating dotfiles directory (#{test_path("dotfiles")})..."
+      overwrite_message = "Dotfiles directory (#{dotfiles_path}) already exists. Would you like to overwrite it? [y/N]"
+      remove_message    = "#  Removing existing dotfiles directory (#{dotfiles_path})..."
+      create_message    = "#  Creating dotfiles directory (#{dotfiles_path})..."
 
       execute
 
@@ -86,8 +86,8 @@ RSpec.describe "init", type: :integration do
     end
 
     it "allows you to overwrite links file" do
-      overwrite_message = "Links file (#{test_path("dotfiles/.links")}) already exists. Would you like to overwrite it? [y/N]"
-      create_message    = "#  Creating links file (#{test_path("dotfiles/.links")})..."
+      overwrite_message = "Links file (#{dotfiles_path(".links")}) already exists. Would you like to overwrite it? [y/N]"
+      create_message    = "#  Creating links file (#{dotfiles_path(".links")})..."
 
       execute
 
@@ -98,8 +98,8 @@ RSpec.describe "init", type: :integration do
     end
 
     it "allows you to reinitialize git repo" do
-      overwrite_message = "Dotfiles dir (#{test_path("dotfiles")}) is already a git repository. Would you like to reinitialize it? [y/N]"
-      create_message    = "#  Reinitialized existing Git repository in #{test_path("dotfiles/.git/")}"
+      overwrite_message = "Dotfiles dir (#{dotfiles_path}) is already a git repository. Would you like to reinitialize it? [y/N]"
+      create_message    = "#  Reinitialized existing Git repository in #{dotfiles_path(".git/")}"
 
       execute
 

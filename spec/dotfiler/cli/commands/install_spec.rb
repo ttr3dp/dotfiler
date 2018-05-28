@@ -5,7 +5,6 @@ require "support/shared/examples/cli_error_handler_example"
 RSpec.describe Dotfiler::CLI::Commands::Install, type: :cli do
   let(:shell) { Dotfiler::Shell.new }
   let(:command) { described_class.new(command_name: "install", shell: shell) }
-  let(:dotfiles_path) { test_path("dotfiles") }
   let(:options) { { path: dotfiles_path } }
   let(:files) { 5.times.each_with_object([]) { |i, result| result << "test_#{i}" } }
 
@@ -16,7 +15,7 @@ RSpec.describe Dotfiler::CLI::Commands::Install, type: :cli do
     files.each do |file|
       links_file_content << "#{file} :: %home%/#{file} :: %dotfiles%/#{file}\n"
     end
-    create_file(dotfiles_path + "/.links", links_file_content)
+    create_file(dotfiles_path(".links"), links_file_content)
   end
 
   it_behaves_like "a command that handles errors", :to_path, path: ""
@@ -53,7 +52,7 @@ RSpec.describe Dotfiler::CLI::Commands::Install, type: :cli do
     command.call(options)
 
     files.each do |file|
-      expect(test_path(file)).to be_a_symlink_of(dotfiles_path + "/" + file)
+      expect(test_path(file)).to be_a_symlink_of(dotfiles_path(file))
     end
   end
 

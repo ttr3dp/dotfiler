@@ -22,11 +22,11 @@ RSpec.describe Dotfiler::CLI::Commands::Unlink, type: :cli do
 
   it "restores file to its original path" do
     expect(file).to be_a_file
-    expect(test_path("dotfiles/foo")).not_to be_a_file
+    expect(dotfiles_path("foo")).not_to be_a_file
   end
 
   it "removes link from links file" do
-    expect(File.read(test_path("dotfiles/.links"))).to eq("")
+    expect(File.read(dotfiles_path(".links"))).to eq("")
   end
 
   context "when tag does not exist" do

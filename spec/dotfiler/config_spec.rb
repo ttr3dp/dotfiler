@@ -19,7 +19,7 @@ RSpec.describe Dotfiler::Config do
     it "returns links file path" do
       initial_setup
 
-      expect(config.links_file_path.to_s).to eq(test_path("dotfiles/.links"))
+      expect(config.links_file_path.to_s).to eq(dotfiles_path(".links"))
     end
   end
 
@@ -46,7 +46,7 @@ RSpec.describe Dotfiler::Config do
     it "loads on initialization" do
       initial_setup
 
-      expect(config[:dotfiles]).to eq(test_path("dotfiles"))
+      expect(config[:dotfiles]).to eq(dotfiles_path)
     end
 
     context "when config file is missing" do

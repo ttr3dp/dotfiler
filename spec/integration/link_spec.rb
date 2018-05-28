@@ -23,19 +23,19 @@ RSpec.describe "link", type: :integration do
     it "moves file to dotfiles dir" do
       execute
 
-      expect(test_path("dotfiles/testrc")).to be_a_file
+      expect(dotfiles_path("testrc")).to be_a_file
     end
 
     it "creates symlink" do
       execute
 
-      expect(file).to be_a_symlink_of(test_path("dotfiles/testrc"))
+      expect(file).to be_a_symlink_of(dotfiles_path("testrc"))
     end
 
     it "appends link to links file" do
       execute
 
-      links_file_content = File.read(test_path("dotfiles/.links"))
+      links_file_content = File.read(dotfiles_path(".links"))
 
       expect(links_file_content).to eq(
         "test :: %home%/testrc :: %dotfiles%/testrc\n"
@@ -58,19 +58,19 @@ RSpec.describe "link", type: :integration do
       it "symlinks to specified target" do
         execute
 
-        expect(test_path("dot_testrc")).to be_a_symlink_of(test_path("dotfiles/testrc"))
+        expect(test_path("dot_testrc")).to be_a_symlink_of(dotfiles_path("testrc"))
       end
     end
 
     context "when item is already in dotfiles dir" do
-      let(:file) { test_path("dotfiles/other_testrc") }
+      let(:file) { dotfiles_path("other_testrc") }
 
       context "without target option" do
         it "exits with error message and code 1 if target option is not provided" do
           _output, error, status = Open3.capture3(command)
 
           expect(error.strip).to eq(
-            "ERROR: Specified file (#{file}) is already in dotfiles directory (#{test_path("dotfiles")}).\nIf you want to symlink it, please provide `--target` option"
+            "ERROR: Specified file (#{file}) is already in dotfiles directory (#{dotfiles_path}).\nIf you want to symlink it, please provide `--target` option"
           )
           expect(status.exitstatus).to eq(1)
         end

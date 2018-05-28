@@ -4,7 +4,6 @@ require "spec_helper"
 
 RSpec.describe "install", type: :integration do
   let(:command_name) { "install" }
-  let(:dotfiles_path) { test_path("dotfiles") }
   let(:command) { "#{bin_path} #{command_name} #{dotfiles_path}" }
   let(:files) { 5.times.each_with_object([]) { |i, result| result << "test_#{i}" } }
 

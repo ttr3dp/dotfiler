@@ -62,7 +62,7 @@ RSpec.configure do |config|
 
   # Dotfiler setup convenience method
   def initial_setup
-    Dotfiler::CLI::Commands::Init.new(command_name: "init").call(path: test_path("dotfiles"))
+    Dotfiler::CLI::Commands::Init.new(command_name: "init").call(path: dotfiles_path)
   end
 
   # Helper method for easier links appending

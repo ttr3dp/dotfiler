@@ -16,41 +16,41 @@ RSpec.describe Dotfiler::Links do
       {
         tag: "test",
         link: test_path("test"),
-        path: test_path("dotfiles/test")
+        path: dotfiles_path("test")
       }
     ])
   end
 
   it "appends new links" do
-    links.append!("nvim", tag: "nvim", link: test_path("nvim"), path: test_path("dotfiles/nvim"))
+    links.append!("nvim", tag: "nvim", link: test_path("nvim"), path: dotfiles_path("nvim"))
 
     expect(links.list).to eq([
       {
         tag: "test",
         link: test_path("test"),
-        path: test_path("dotfiles/test")
+        path: dotfiles_path("test")
       },
       {
         tag: "nvim",
         link: test_path("nvim"),
-        path: test_path("dotfiles/nvim")
+        path: dotfiles_path("nvim")
       }
     ])
   end
 
   it "removes links by tag" do
-    links.append!("nvim", link: test_path("nvim"), path: test_path("dotfiles/nvim"))
+    links.append!("nvim", link: test_path("nvim"), path: dotfiles_path("nvim"))
 
     expect(links.list).to eq([
       {
         tag: "test",
         link: test_path("test"),
-        path: test_path("dotfiles/test")
+        path: dotfiles_path("test")
       },
       {
         tag: "nvim",
         link: test_path("nvim"),
-        path: test_path("dotfiles/nvim")
+        path: dotfiles_path("nvim")
       }
     ])
 
@@ -59,7 +59,7 @@ RSpec.describe Dotfiler::Links do
       {
         tag: "nvim",
         link: test_path("nvim"),
-        path: test_path("dotfiles/nvim")
+        path: dotfiles_path("nvim")
       }
     ])
   end
