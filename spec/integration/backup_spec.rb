@@ -26,11 +26,10 @@ RSpec.describe "backup", type: :integration do
       end
     end
 
-    it "copies existing dotfiles dir to backup dir and removes .git subdir" do
+    specify "output" do
       expect(execute).to include("Backing up dotfiles directory (#{dotfiles_path}) to #{test_path(".dotfiler_backup_")}")
 
       backup_dir = Dir.glob(test_path(".dotfiler_backup_*")).first
-
       expect(Dir.entries(backup_dir)).to eq([".", "..", ".links", "testrc", "otherrc"])
     end
   end

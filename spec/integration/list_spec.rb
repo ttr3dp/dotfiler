@@ -28,8 +28,6 @@ RSpec.describe "list", type: :integration do
     end
 
     it "lists all links" do
-      execute
-
       expected_output = <<-EOF
   test
     - LINK: #{test_path("testrc")}

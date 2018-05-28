@@ -7,35 +7,8 @@ RSpec.describe "init", type: :integration do
 
   include_context "integration"
 
-  it "creates initial configuration files" do
-    execute
 
-    expect(test_path(".dotfiler")).to be_a_file
-
-    config = File.read(test_path(".dotfiler"))
-
-    expect(config).to eq("dotfiles: #{dotfiles_path}")
-  end
-
-  it "creates dotfiles directory" do
-    execute
-
-    expect(dotfiles_path).to be_a_directory
-  end
-
-  it "creates links file" do
-    execute
-
-    expect(dotfiles_path(".links")).to be_a_file
-  end
-
-  it "initializes git repo at dotfiles directory" do
-    execute
-
-    expect(dotfiles_path(".git")).to be_a_directory
-  end
-
-  it "outputs steps info" do
+  specify "output" do
     expected_output = <<~EOF
       #  Creating config file (#{test_path(".dotfiler")})...
       #  Creating dotfiles directory (#{dotfiles_path})...
@@ -51,9 +24,7 @@ RSpec.describe "init", type: :integration do
       let(:options) { "--no-git" }
 
       it "skips git repo initialization" do
-        execute
-
-        expect(dotfiles_path(".git")).not_to be_a_directory
+        expect(execute).not_to include("#  Initialized empty Git repository in #{dotfiles_path(".git")}")
       end
     end
   end
@@ -78,7 +49,10 @@ RSpec.describe "init", type: :integration do
 
       execute
 
-      lines = capture_output_lines(input_data: "n\ny")
+      lines = capture_output_lines(input_data: <<~EOF)
+        n
+        y
+      EOF
 
       expect(lines[1]).to eq(overwrite_message)
       expect(lines[2]).to eq(remove_message)
@@ -91,7 +65,11 @@ RSpec.describe "init", type: :integration do
 
       execute
 
-      lines = capture_output_lines(input_data: "n\nn\ny")
+      lines = capture_output_lines(input_data: <<~EOF)
+        n
+        n
+        y
+      EOF
 
       expect(lines[2]).to eq(overwrite_message)
       expect(lines[3]).to eq(create_message)
@@ -103,7 +81,12 @@ RSpec.describe "init", type: :integration do
 
       execute
 
-      lines = capture_output_lines(input_data: "n\nn\nn\ny")
+      lines = capture_output_lines(input_data: <<~EOF)
+        n
+        n
+        n
+        y
+      EOF
 
       expect(lines[3]).to eq(overwrite_message)
       expect(lines[4]).to eq(create_message)

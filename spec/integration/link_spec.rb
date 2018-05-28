@@ -20,32 +20,10 @@ RSpec.describe "link", type: :integration do
       create_file(file)
     end
 
-    it "moves file to dotfiles dir" do
-      execute
-
-      expect(dotfiles_path("testrc")).to be_a_file
-    end
-
-    it "creates symlink" do
-      execute
-
-      expect(file).to be_a_symlink_of(dotfiles_path("testrc"))
-    end
-
-    it "appends link to links file" do
-      execute
-
-      links_file_content = File.read(dotfiles_path(".links"))
-
-      expect(links_file_content).to eq(
-        "test :: %home%/testrc :: %dotfiles%/testrc\n"
-      )
-    end
-
-    it "outputs info for each operation" do
+    specify "output" do
       expected_output = <<-EOF
 #  Moving #{file} to dotfiles (#{dotfiles_path})...
-#  Symlinking dotfile (#{dotfiles_path + "/testrc"}) to #{file}...
+#  Symlinking dotfile (#{dotfiles_path("testrc")}) to #{file}...
 #  Adding #{tag} to Dotfiler links...
       EOF
 
@@ -56,9 +34,9 @@ RSpec.describe "link", type: :integration do
       let(:options) { "-t #{test_path("dot_testrc")}" }
 
       it "symlinks to specified target" do
-        execute
-
-        expect(test_path("dot_testrc")).to be_a_symlink_of(dotfiles_path("testrc"))
+        expect(execute.split("\n")[1]).to eq(
+          "#  Symlinking dotfile (#{dotfiles_path("testrc")}) to #{test_path("dot_testrc")}..."
+        )
       end
     end
 
