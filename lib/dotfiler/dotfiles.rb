@@ -82,8 +82,8 @@ module Dotfiler
 
         name, link, path = sanitized_line.split(" :: ")
 
-        link = link.gsub(HOME_PLACEHOLDER, home_path.to_s)
-        path = path.gsub(DOTFILES_PLACEHOLDER, config[:dotfiles])
+        link = link.sub(HOME_PLACEHOLDER, home_path.to_s)
+        path = path.sub(DOTFILES_PLACEHOLDER, config[:dotfiles])
 
         result << Dotfile.new(name: name, link: link, path: path)
       end
