@@ -27,10 +27,10 @@ RSpec.describe Dotfiler::CLI::Commands::Link, type: :cli do
     expect(file).to be_a_symlink_of(dotfiles_path("foo"))
   end
 
-  it "appends link to links file" do
-    links_file_content = File.read(dotfiles_path(".links"))
+  it "appends dotfile to dotfiles file" do
+    dotfiles_file_content = File.read(dotfiles_file_path)
 
-    expect(links_file_content).to eq(
+    expect(dotfiles_file_content).to eq(
       "foo :: %home%/foo :: %dotfiles%/foo\n"
     )
   end

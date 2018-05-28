@@ -3,7 +3,7 @@ require "yaml"
 module Dotfiler
   class Config
     CONFIG_FILE        = ".dotfiler".freeze
-    LINKS_FILE         = ".links".freeze
+    DOTFILES_FILE      = ".dotfiles".freeze
     RELATIVE_HOME_PATH = "~".freeze
 
     include Dotfiler::Import["fs", "to_path"]
@@ -33,12 +33,12 @@ module Dotfiler
       file_path.exists?
     end
 
-    def links_file_path
-      @_links_file_path = path(self[:dotfiles]).join(links_file_name) if set?
+    def dotfiles_file_path
+      @_dotfiles_file_path = path(self[:dotfiles]).join(dotfiles_file_name) if set?
     end
 
-    def links_file_name
-      LINKS_FILE
+    def dotfiles_file_name
+      DOTFILES_FILE
     end
 
     def reload!

@@ -10,12 +10,12 @@ RSpec.describe Dotfiler::CLI::Commands::Install, type: :cli do
 
   before do
     create_dir(dotfiles_path)
-    links_file_content = ""
+    dotfiles_file_content = ""
     create_files(dotfiles_path)
     files.each do |file|
-      links_file_content << "#{file} :: %home%/#{file} :: %dotfiles%/#{file}\n"
+      dotfiles_file_content << "#{file} :: %home%/#{file} :: %dotfiles%/#{file}\n"
     end
-    create_file(dotfiles_path(".links"), links_file_content)
+    create_file(dotfiles_file_path, dotfiles_file_content)
   end
 
   it_behaves_like "a command that handles errors", :to_path, path: ""
@@ -25,7 +25,7 @@ RSpec.describe Dotfiler::CLI::Commands::Install, type: :cli do
       before do
         create_file(test_path(".dotfiler"), "dotfiles: #{test_path("old_dotfiles")}")
         old_dotfiles_dir = create_dir(test_path("old_dotfiles"))
-        create_file(test_path(old_dotfiles_dir + "/" + ".links"))
+        create_file(test_path(old_dotfiles_dir + "/" + ".dotfiles"))
       end
 
       it "updates dotfiles path" do

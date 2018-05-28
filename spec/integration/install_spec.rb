@@ -13,19 +13,19 @@ RSpec.describe "install", type: :integration do
     create_dir(dotfiles_path)
     create_files(dotfiles_path)
 
-    links_file_content = ""
+    dotfiles_file_content = ""
     files.each do |file|
-      links_file_content << "#{file} :: %home%/#{file} :: %dotfiles%/#{file}\n"
+      dotfiles_file_content << "#{file} :: %home%/#{file} :: %dotfiles%/#{file}\n"
     end
 
-    create_file(dotfiles_path + "/.links", links_file_content)
+    create_file(dotfiles_file_path, dotfiles_file_content)
   end
 
   it "installs dotfiles" do
     output = execute
 
     expected_output = files.each_with_object([]) do |file, result|
-      result << "#  Symlinking dotfile (#{dotfiles_path + "/" + file}) to #{test_path(file)}...\n"
+      result << "#  Symlinking dotfile (#{dotfiles_path(file)}) to #{test_path(file)}...\n"
     end.join("")
 
     files.each do |file|

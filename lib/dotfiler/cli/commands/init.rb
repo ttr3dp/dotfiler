@@ -4,7 +4,7 @@ module Dotfiler
       class Init < Command
         include Dotfiler::Import["fs"]
 
-        desc "Create initial configuration. Create dotfiles dir at specified path. Initialize git repo."
+        desc "Create config file. Create dotfiles dir at specified path. Initialize git repo."
 
         argument :path, required: true, desc: "Dotfiles directory path"
         option :git, type: :boolean, default: true, desc: "Initialize git repo for dotfiles directory"
@@ -15,7 +15,7 @@ module Dotfiler
 
             create_config_file(config_file_contents(dotfiles_path))
             create_dotfiles_dir(dotfiles_path)
-            create_links_file(dotfiles_path)
+            create_dotfiles_file(dotfiles_path)
             initialize_vcs_repo(dotfiles_path) unless options[:git] == false
           end
         end
@@ -51,17 +51,17 @@ module Dotfiler
           fs.create_dir(dotfiles_path.to_s)
         end
 
-        def create_links_file(dotfiles_path)
-          links_file = dotfiles_path.join(config.links_file_name)
+        def create_dotfiles_file(dotfiles_path)
+          dotfiles_file = dotfiles_path.join(config.dotfiles_file_name)
 
-          if links_file.exists?
-            answer = prompt("Links file (#{links_file}) already exists. Would you like to overwrite it?")
+          if dotfiles_file.exists?
+            answer = prompt("Dotfiles file (#{dotfiles_file}) already exists. Would you like to overwrite it?")
 
             return unless answer == :yes
           end
 
-          info("Creating links file (#{links_file})...")
-          fs.create_file(links_file.to_s)
+          info("Creating dotfiles file (#{dotfiles_file})...")
+          fs.create_file(dotfiles_file.to_s)
         end
 
         def initialize_vcs_repo(dotfiles_path)

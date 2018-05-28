@@ -65,7 +65,7 @@ RSpec.configure do |config|
     Dotfiler::CLI::Commands::Init.new(command_name: "init").call(path: dotfiles_path)
   end
 
-  # Helper method for easier links appending
+  # Helper method for easier dotfiles creation
   def add_dotfiles(dotfile_params)
     dotfiles = Dotfiler.resolve["dotfiles"]
 

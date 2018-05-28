@@ -15,11 +15,11 @@ RSpec.describe Dotfiler::Config do
     end
   end
 
-  describe "#links_file_path" do
-    it "returns links file path" do
+  describe "#dotfiles_file_path" do
+    it "returns dotfiles file path" do
       initial_setup
 
-      expect(config.links_file_path.to_s).to eq(dotfiles_path(".links"))
+      expect(config.dotfiles_file_path.to_s).to eq(dotfiles_file_path)
     end
   end
 

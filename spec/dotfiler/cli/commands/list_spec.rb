@@ -16,7 +16,7 @@ RSpec.describe Dotfiler::CLI::Commands::List, type: :cli do
 
   it_behaves_like "a command that handles errors", :dotfiles
 
-  it "lists all links" do
+  it "lists all dotfiles" do
     expected_output = <<-EOF
   foo
     - LINK: #{test_path("foo")}
@@ -45,9 +45,9 @@ RSpec.describe Dotfiler::CLI::Commands::List, type: :cli do
     command.call(names: true)
   end
 
-  context "when there are no links" do
+  context "when there are no dotfiles" do
     before do
-      File.open(dotfiles_path(".links"), "w+") { |f| f << "" }
+      File.open(dotfiles_file_path, "w+") { |f| f << "" }
     end
 
     it "outputs message" do

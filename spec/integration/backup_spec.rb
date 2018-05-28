@@ -5,7 +5,7 @@ require "spec_helper"
 require "support/shared/examples/initialization_guard_examples"
 
 RSpec.describe "backup", type: :integration do
-  let(:links) do
+  let(:dotfiles) do
     [
       { file: test_path("testrc"), name: "test" },
       { file: test_path("otherrc"), name: "other" }
@@ -20,9 +20,9 @@ RSpec.describe "backup", type: :integration do
   context "when initialized" do
     before do
       `#{bin_path} init #{dotfiles_path}`
-      links.each do |link|
-        create_file(link[:file])
-        `#{bin_path} link #{link[:name]} #{link[:file]}`
+      dotfiles.each do |dotfile|
+        create_file(dotfile[:file])
+        `#{bin_path} link #{dotfile[:name]} #{dotfile[:file]}`
       end
     end
 
@@ -30,7 +30,7 @@ RSpec.describe "backup", type: :integration do
       expect(execute).to include("Backing up dotfiles directory (#{dotfiles_path}) to #{test_path(".dotfiler_backup_")}")
 
       backup_dir = Dir.glob(test_path(".dotfiler_backup_*")).first
-      expect(Dir.entries(backup_dir)).to eq([".", "..", ".links", "testrc", "otherrc"])
+      expect(Dir.entries(backup_dir)).to eq([".", "..", ".dotfiles", "testrc", "otherrc"])
     end
   end
 end

@@ -25,8 +25,8 @@ RSpec.describe Dotfiler::CLI::Commands::Unlink, type: :cli do
     expect(dotfiles_path("foo")).not_to be_a_file
   end
 
-  it "removes link from links file" do
-    expect(File.read(dotfiles_path(".links"))).to eq("")
+  it "removes dotfile from dotfiles file" do
+    expect(File.read(dotfiles_file_path)).to eq("")
   end
 
   context "when name does not exist" do

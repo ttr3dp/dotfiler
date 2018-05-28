@@ -21,8 +21,8 @@ module TestPathHelper
     pathname.join(path).to_s
   end
 
-  def links_path(path = nil)
-    pathname = Pathname.new(dotfiles_path(".links"))
+  def dotfiles_file_path(path = nil)
+    pathname = Pathname.new(dotfiles_path(".dotfiles"))
 
     return pathname.to_s unless path
 

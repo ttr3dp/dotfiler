@@ -2,7 +2,7 @@ require "spec_helper"
 
 RSpec.describe Dotfiler::Dotfiles do
   let(:content) { "test :: %home%/test :: %dotfiles%/test\n" }
-  let(:file) { create_file(links_path, content) }
+  let(:file) { create_file(dotfiles_file_path, content) }
   let(:dotfiles) { described_class.new }
 
   before do
@@ -53,7 +53,7 @@ RSpec.describe Dotfiler::Dotfiles do
   end
 
   describe "#add!" do
-    it "adds new links" do
+    it "adds new dotfile" do
       create_dotfile("nvim")
 
       expect(dotfiles.list).to eq([
@@ -73,7 +73,7 @@ RSpec.describe Dotfiler::Dotfiles do
     it "appends new dotfiles to .dotfiles" do
       create_dotfile("nvim")
 
-      expect(File.read(links_path)).to eq(<<~EOF)
+      expect(File.read(dotfiles_file_path)).to eq(<<~EOF)
         test :: %home%/test :: %dotfiles%/test
         nvim :: %home%/nvim :: %dotfiles%/nvim
       EOF
@@ -112,7 +112,7 @@ RSpec.describe Dotfiler::Dotfiles do
       create_dotfile("nvim")
       dotfiles.remove!("test")
 
-      expect(File.read(links_path)).to eq(<<~EOF)
+      expect(File.read(dotfiles_file_path)).to eq(<<~EOF)
         nvim :: %home%/nvim :: %dotfiles%/nvim
       EOF
     end

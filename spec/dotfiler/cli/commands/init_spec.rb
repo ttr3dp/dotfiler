@@ -23,8 +23,8 @@ RSpec.describe Dotfiler::CLI::Commands::Init, type: :cli do
     expect(dotfiles_path).to be_a_directory
   end
 
-  it "creates links file" do
-    expect(dotfiles_path(".links")).to be_a_file
+  it "creates dotfiles file" do
+    expect(dotfiles_file_path).to be_a_file
   end
 
   it "initializes git repo at dotfiles directory" do

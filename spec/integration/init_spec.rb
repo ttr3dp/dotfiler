@@ -12,8 +12,8 @@ RSpec.describe "init", type: :integration do
     expected_output = <<~EOF
       #  Creating config file (#{test_path(".dotfiler")})...
       #  Creating dotfiles directory (#{dotfiles_path})...
-      #  Creating links file (#{dotfiles_path + "/.links"})...
-      #  Initialized empty Git repository in #{dotfiles_path + "/.git/"}
+      #  Creating dotfiles file (#{dotfiles_file_path})...
+      #  Initialized empty Git repository in #{dotfiles_path(".git") + "/"}
     EOF
 
     expect(execute).to eq(expected_output)
@@ -59,9 +59,9 @@ RSpec.describe "init", type: :integration do
       expect(lines[3]).to eq(create_message)
     end
 
-    it "allows you to overwrite links file" do
-      overwrite_message = "Links file (#{dotfiles_path(".links")}) already exists. Would you like to overwrite it? [y/N]"
-      create_message    = "#  Creating links file (#{dotfiles_path(".links")})..."
+    it "allows you to overwrite dotfiles file" do
+      overwrite_message = "Dotfiles file (#{dotfiles_file_path}) already exists. Would you like to overwrite it? [y/N]"
+      create_message    = "#  Creating dotfiles file (#{dotfiles_file_path})..."
 
       execute
 

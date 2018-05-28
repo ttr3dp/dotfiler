@@ -15,7 +15,7 @@ module Dotfiler
           handle_errors do
             dotfiles_path = to_path.(path)
 
-            validate_links_file!(dotfiles_path)
+            validate_dotfiles_file!(dotfiles_path)
 
             configure_dotfiles_dir(dotfiles_path)
 
@@ -23,18 +23,18 @@ module Dotfiler
             dotfiles.config.reload!
             dotfiles.reload!
 
-            create_symlinks
+            create_symdotfiles
           end
         end
 
         private
 
-        def validate_links_file!(dotfiles_path)
-          links_path = dotfiles_path.join(config.links_file_name)
+        def validate_dotfiles_file!(dotfiles_path)
+          dotfiles_path = dotfiles_path.join(config.dotfiles_file_name)
 
-          return if links_path.file?
+          return if dotfiles_path.file?
 
-          error!("Links file (#{links_path}) not found...")
+          error!("Dotfiles file (#{dotfiles_path}) not found...")
         end
 
         def configure_dotfiles_dir(dotfiles_path)
@@ -45,7 +45,7 @@ module Dotfiler
           end
         end
 
-        def create_symlinks
+        def create_symdotfiles
           dotfiles.each do |dotfile|
             backup(dotfile.link) if dotfile.link.exists? && !dotfile.link.symlink?
 

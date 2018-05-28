@@ -39,7 +39,7 @@ module Dotfiler
     def add!(*args)
       dotfile = Dotfile.new(*args)
 
-      File.open(config.links_file_path.to_s, "a") do |file|
+      File.open(config.dotfiles_file_path.to_s, "a") do |file|
         file << dotfile_to_line(dotfile)
       end
 
@@ -53,7 +53,7 @@ module Dotfiler
         result << dotfile_to_line(dotfile)
       end
 
-      File.open(config.links_file_path.to_s, "w+") { |file| file << content }
+      File.open(config.dotfiles_file_path.to_s, "w+") { |file| file << content }
 
       reload!
     end
@@ -64,10 +64,10 @@ module Dotfiler
 
     def load_data!
       @dotfiles = if config.set?
-                parse(File.readlines(config.links_file_path.to_s))
-              else
-                {}
-              end
+                    parse(File.readlines(config.dotfiles_file_path.to_s))
+                  else
+                    {}
+                  end
     end
 
     alias_method :reload!, :load_data!
