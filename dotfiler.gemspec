@@ -16,6 +16,8 @@ Gem::Specification.new do |spec|
   spec.bindir       = "exe"
   spec.executables  = ["dotfiler"]
 
+  gem.required_ruby_version = ">= 2.1"
+
   spec.add_dependency "dry-container",   "0.6.0"
   spec.add_dependency "dry-auto_inject", "0.4.6"
   spec.add_dependency "hanami-cli",      "0.2.0"
