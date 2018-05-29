@@ -46,8 +46,8 @@ module Dotfiler
     end
 
     def update!(args = {})
-      new_data     = @data.merge(args).sort
-      file_content = new_data.each_with_object([]) { |k, v| "#{k}: #{v}" }.join("\n")
+      new_data     = @data.merge(args)
+      file_content = new_data.each_with_object([]) { |(k, v), result| result << "#{k}: #{v}" }.join("\n")
 
       fs.create_file(file_path.to_s, file_content)
 
@@ -63,7 +63,7 @@ module Dotfiler
     def load_data
       return {} unless set?
 
-      YAML.load_file(file_path.to_s).each_with_object({}) do |(setting, value), result|
+      (YAML.load_file(file_path.to_s) || {}).each_with_object({}) do |(setting, value), result|
         result[setting.to_sym] = value
       end
     end

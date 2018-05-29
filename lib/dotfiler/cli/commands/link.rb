@@ -7,7 +7,7 @@ module Dotfiler
         desc "Add specified file/directory to dotfiles"
 
         argument :name,   required: true,  desc: "Name under which the dotfile will be created"
-        argument :path,   required: true,  desc: "File/direcotory path"
+        argument :path,   required: true,  desc: "File/directory path"
         option   :target, required: false, desc: "Path to where the symlink will be created", aliases: ["-t"]
 
         def call(name:, path:, **options)
@@ -22,7 +22,7 @@ module Dotfiler
             info("Symlinking dotfile (#{dotfile_path}) to #{target_path}...")
             symlink_path  = symlinker.call(dotfile_path, target_path)
 
-            info("Adding #{name} to Dotfiler links...")
+            info("Adding #{name} to dotfiles...")
             dotfiles.add!(name: name, link: symlink_path.to_s, path: dotfile_path.to_s)
           end
         end
@@ -84,7 +84,7 @@ module Dotfiler
         end
 
         def move(source, destination)
-          info("Moving #{source} to dotfiles (#{destination})...")
+          info("Moving #{source} to dotfiles directory (#{destination})...")
           mover.call(source, destination)
         end
       end

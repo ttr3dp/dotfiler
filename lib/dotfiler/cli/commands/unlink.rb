@@ -21,7 +21,7 @@ module Dotfiler
             mover.call(dotfile.path, dotfile.link)
 
 
-            info("Removing '#{name}' from Dotfiler links...")
+            info("Removing '#{name}' from dotfiles...")
             dotfiles.remove!(name)
           end
         end
