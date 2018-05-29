@@ -4,7 +4,7 @@ module Dotfiler
       class Edit < Command
         include Dotfiler::Import["fs", "dotfiles"]
 
-        desc "Edit specified dotfile with $EDITOR"
+        desc "Edit specified dotfile. By default, dotfile will be opened in $EDITOR"
 
         argument :name, required: true, desc: "Name of the dotfile you want to edit"
         option :with, aliases: ["w"], required: false, desc: "Editor in which to open the specified dotfile"

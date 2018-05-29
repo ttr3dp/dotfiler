@@ -7,7 +7,7 @@ module Dotfiler
 
         include Dotfiler::Import["copier", "remover"]
 
-        desc "Backup existing dotfiles dir"
+        desc "Backup existing dotfiles directory"
 
         def call(*)
           handle_errors do

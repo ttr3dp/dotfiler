@@ -4,9 +4,9 @@ module Dotfiler
       class Init < Command
         include Dotfiler::Import["fs"]
 
-        desc "Create config file. Create dotfiles dir at specified path. Initialize git repo."
+        desc "Create config file. Create dotfiles directory at specified path. Initialize git repo."
 
-        argument :path, required: true, desc: "Dotfiles directory path"
+        argument :path, required: true, desc: "Path where the Dotfiles directory will be created"
         option :git, type: :boolean, default: true, desc: "Initialize git repo for dotfiles directory"
 
         def call(path:, **options)

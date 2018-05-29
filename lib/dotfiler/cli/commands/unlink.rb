@@ -4,9 +4,9 @@ module Dotfiler
       class Unlink < Command
         include Dotfiler::Import["dotfiles", "mover", "remover"]
 
-        desc "Unlink specified dotfile and restore it to original location"
+        desc "Remove specified dotfile from dotfiles and restore it to it's original location"
 
-        argument :name, required: true, desc: "Dotfile name"
+        argument :name, required: true, desc: "Name of the dotfile that should be unlinked"
 
         def call(name:)
           handle_errors do

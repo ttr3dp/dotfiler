@@ -4,10 +4,10 @@ module Dotfiler
       class Link < Command
         include Dotfiler::Import["dotfiles", "symlinker", "mover"]
 
-        desc "Add specified file/dir to dotfiles"
+        desc "Add specified file/directory to dotfiles"
 
-        argument :name,   required: true,  desc: "Dotfile name"
-        argument :path,   required: true,  desc: "File/dir path"
+        argument :name,   required: true,  desc: "Name under which the dotfile will be created"
+        argument :path,   required: true,  desc: "File/direcotory path"
         option   :target, required: false, desc: "Path to where the symlink will be created", aliases: ["-t"]
 
         def call(name:, path:, **options)

@@ -47,9 +47,7 @@ module Dotfiler
 
     def update!(args = {})
       new_data     = @data.merge(args).sort
-      file_content = ""
-
-      new_data.each { |k, v| file_content += "#{k}: #{v}" }
+      file_content = new_data.each_with_object([]) { |k, v| "#{k}: #{v}" }.join("\n")
 
       fs.create_file(file_path.to_s, file_content)
 
