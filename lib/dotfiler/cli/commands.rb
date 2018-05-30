@@ -28,7 +28,7 @@ module Dotfiler
       %w(add remove list edit backup).each do |cmd|
         before(cmd) do
           unless Dotfiler.resolve[:config].set?
-            $stderr.puts("ERROR: Dotfiler needs to be setup first. Check `dotfiler init -h`")
+            $stderr.puts("ERROR: Dotfiler needs to be set up first. Check `dotfiler init -h`")
             exit(1)
           end
         end
