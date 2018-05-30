@@ -28,7 +28,7 @@ module Dotfiler
     end
 
     def names
-      @dotfiles.map(&:name)
+      @dotfiles.map(&:name).sort
     end
 
     def name_taken?(name)
