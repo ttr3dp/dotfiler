@@ -5,7 +5,7 @@ require "spec_helper"
 require "support/shared/examples/initialization_guard_examples"
 
 RSpec.describe "remove", type: :integration do
-  let(:name) { "test" }
+  let(:name) { "testrc" }
   let(:file) { test_path("testrc") }
   let(:command_name) { "remove" }
   let(:command) { "#{bin_path} #{command_name} #{name}" }
@@ -18,7 +18,7 @@ RSpec.describe "remove", type: :integration do
     before do
       `#{bin_path} init #{dotfiles_path}`
       create_file(file)
-      `#{bin_path} add #{name} #{file}`
+      `#{bin_path} add #{file}`
     end
 
     specify "output" do

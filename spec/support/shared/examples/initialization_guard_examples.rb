@@ -5,7 +5,7 @@ RSpec.shared_examples "a command that cannot be run before Dotfiler is initializ
     it "outputs error" do
       _output, error, status = Open3.capture3(command)
 
-      expect(error.strip).to eq("ERROR: Dotfiler needs to be setup first. Check `dotfiler init -h`")
+      expect(error.strip).to eq("ERROR: Dotfiler needs to be set up first. Check `dotfiler init -h`")
       expect(status.exitstatus).to eq(1)
     end
   end

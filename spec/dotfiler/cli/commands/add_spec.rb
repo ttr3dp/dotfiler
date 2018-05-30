@@ -9,7 +9,7 @@ RSpec.describe Dotfiler::CLI::Commands::Add, type: :cli do
   let(:file) { test_path(name) }
   let(:path) { file }
   let(:options) { {} }
-  let(:args) { { name: name, path: path }.merge(options) }
+  let(:args) { { path: path }.merge(options) }
 
   before do
     initial_setup
@@ -17,7 +17,7 @@ RSpec.describe Dotfiler::CLI::Commands::Add, type: :cli do
     command.call(args)
   end
 
-  it_behaves_like "a command that handles errors", :to_path, name: "oops", path: ""
+  it_behaves_like "a command that handles errors", :to_path, path: ""
 
   it "moves file to dotfiles dir" do
     expect(dotfiles_path("foo")).to be_a_file
@@ -43,6 +43,16 @@ RSpec.describe Dotfiler::CLI::Commands::Add, type: :cli do
     end
   end
 
+  context "with name option" do
+    let(:options) { { name: "dotfoo" } }
+
+    it "assigns passed name to dotfile" do
+      dotfiles_file_content = File.read(dotfiles_file_path)
+
+      expect(dotfiles_file_content.split(" :: ").first).to eq("dotfoo")
+    end
+  end
+
   context "when item is already in dotfiles dir" do
     let(:file) { dotfiles_path("bar") }
 
@@ -54,6 +64,18 @@ RSpec.describe Dotfiler::CLI::Commands::Add, type: :cli do
         )
         expect{ command.call(args) }.to terminate.with_code(1)
       end
+    end
+  end
+
+  context "when path is invalid" do
+    it "outputs error" do
+      expect(shell).to receive(:print).with("Path #{test_path("oops")} does not exist", :error)
+
+      command.call(path: test_path("oops"))
+    end
+
+    it "exits with code 1" do
+      expect{ command.call(path: "oops") }.to terminate.with_code(1)
     end
   end
 

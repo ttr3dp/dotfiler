@@ -7,8 +7,8 @@ require "support/shared/examples/initialization_guard_examples"
 RSpec.describe "backup", type: :integration do
   let(:dotfiles) do
     [
-      { file: test_path("testrc"), name: "test" },
-      { file: test_path("otherrc"), name: "other" }
+      { file: test_path("testrc"), name: "testrc" },
+      { file: test_path("otherrc"), name: "otherrc" }
     ]
   end
   let(:command) { "#{bin_path} backup" }
@@ -22,7 +22,7 @@ RSpec.describe "backup", type: :integration do
       `#{bin_path} init #{dotfiles_path}`
       dotfiles.each do |dotfile|
         create_file(dotfile[:file])
-        `#{bin_path} add #{dotfile[:name]} #{dotfile[:file]}`
+        `#{bin_path} add #{dotfile[:file]}`
       end
     end
 

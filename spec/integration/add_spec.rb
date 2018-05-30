@@ -5,10 +5,10 @@ require "spec_helper"
 require "support/shared/examples/initialization_guard_examples"
 
 RSpec.describe "add", type: :integration do
-  let(:name) { "test" }
+  let(:name) { "testrc" }
   let(:file) { test_path("testrc") }
   let(:command_name) { "add" }
-  let(:command) { "#{bin_path} #{command_name} #{name} #{file} #{options}" }
+  let(:command) { "#{bin_path} #{command_name} #{file} #{options}" }
 
   include_context "integration"
 
@@ -40,6 +40,14 @@ RSpec.describe "add", type: :integration do
       end
     end
 
+    context "with name option" do
+      let(:options) { "-n custom_name" }
+
+      it "assigns passed name to dotfile" do
+        expect(execute).to include("#  Adding custom_name to dotfiles...")
+      end
+    end
+
     context "when item is already in dotfiles dir" do
       let(:file) { dotfiles_path("other_testrc") }
 
@@ -61,7 +69,7 @@ RSpec.describe "add", type: :integration do
       it "outputs error" do
         _output, error, status = Open3.capture3(command)
 
-        expect(error.strip).to eq("ERROR: Dotfile with the name 'test' already exists")
+        expect(error.strip).to eq("ERROR: Dotfile with the name '#{name}' already exists")
         expect(status.exitstatus).to eq(1)
       end
     end

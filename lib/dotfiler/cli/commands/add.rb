@@ -6,21 +6,27 @@ module Dotfiler
 
         desc "Add specified file/directory to dotfiles"
 
-        argument :name,   required: true,  desc: "Name under which the dotfile will be created"
         argument :path,   required: true,  desc: "File/directory path"
+        option   :name,   required: false, desc: "Name which will be assigned to dotfile",    aliases: ["-n"]
         option   :target, required: false, desc: "Path to where the symlink will be created", aliases: ["-t"]
 
-        def call(name:, path:, **options)
+        def call(path:, **options)
           handle_errors do
+            path = to_path.(path)
+
+            validate_path!(path)
+
+            name = options.fetch(:name, generate_dotfile_name(path))
+
             validate_name!(name)
 
-            path          = to_path.(path)
             dotfiles_path = to_path.(config[:dotfiles])
             dotfile_path  = resolve_dotfile_path(path, dotfiles_path, options)
             target_path   = to_path.(options.fetch(:target, path.to_s))
 
             info("Symlinking dotfile (#{dotfile_path}) to #{target_path}...")
             symlink_path  = symlinker.call(dotfile_path, target_path)
+
 
             info("Adding #{name} to dotfiles...")
             dotfiles.add!(name: name, link: symlink_path.to_s, path: dotfile_path.to_s)
@@ -29,10 +35,12 @@ module Dotfiler
 
         private
 
-        def validate_name!(name)
-          return unless dotfiles.name_taken?(name)
+        def validate_path!(path)
+          error!("Path #{path} does not exist") unless path.exists?
+        end
 
-          error!("Dotfile with the name '#{name}' already exists")
+        def validate_name!(name)
+          error!("Dotfile with the name '#{name}' already exists") if dotfiles.name_taken?(name)
         end
 
         def resolve_dotfile_path(path, dotfiles_path, options)
@@ -86,6 +94,10 @@ module Dotfiler
         def move(source, destination)
           info("Moving #{source} to dotfiles directory (#{destination})...")
           mover.call(source, destination)
+        end
+
+        def generate_dotfile_name(path)
+          path.name.to_s.gsub(/\A[._]+/, "")
         end
       end
     end
