@@ -86,14 +86,14 @@ Example:
 
 ### Removing existing dotfile
 
-To remove a dotfile, use `unlink` command.
+To remove a dotfile, use `remove` command.
 
-    $ dotfiler unlink --help
+    $ dotfiler remove --help
     Command:
-      dotfiler unlink
+      dotfiler remove
 
     Usage:
-      dotfiler unlink NAME
+      dotfiler remove NAME
 
     Description:
       Remove specified dotfile from dotfiles and restore it to it's original location
@@ -106,7 +106,7 @@ To remove a dotfile, use `unlink` command.
 
 Example:
 
-    $ dotfiler unlink zsh
+    $ dotfiler remove zsh
     #  Removing symlink (/Users/aleksandar/.zshrc)...
     #  Restoring dotfile (/Users/aleksandar/code/my_dotfiles/.zshrc) to its original location (/Users/aleksandar/.zshrc)...
     #  Removing 'zsh' from dotfiles...

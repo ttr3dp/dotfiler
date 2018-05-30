@@ -59,7 +59,7 @@ RSpec.describe "list", type: :integration do
     context "when there are no links" do
       before do
         dotfiles.each do |dotfiles|
-          `#{bin_path} unlink #{dotfiles[:name]}`
+          `#{bin_path} remove #{dotfiles[:name]}`
         end
       end
 

@@ -4,10 +4,10 @@ require "spec_helper"
 
 require "support/shared/examples/initialization_guard_examples"
 
-RSpec.describe "unlink", type: :integration do
+RSpec.describe "remove", type: :integration do
   let(:name) { "test" }
   let(:file) { test_path("testrc") }
-  let(:command_name) { "unlink" }
+  let(:command_name) { "remove" }
   let(:command) { "#{bin_path} #{command_name} #{name}" }
 
   include_context "integration"
@@ -45,7 +45,7 @@ RSpec.describe "unlink", type: :integration do
     end
 
     context "aliases" do
-      let(:command_name) { "uln" }
+      let(:command_name) { "rm" }
 
       it "works" do
         execute

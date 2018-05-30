@@ -1,7 +1,7 @@
 module Dotfiler
   module CLI
     module Commands
-      class Unlink < Command
+      class Remove < Command
         include Dotfiler::Import["dotfiles", "mover", "remover"]
 
         desc "Remove specified dotfile from dotfiles and restore it to it's original location"

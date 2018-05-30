@@ -2,9 +2,9 @@ require "spec_helper"
 
 require "support/shared/examples/cli_error_handler_example"
 
-RSpec.describe Dotfiler::CLI::Commands::Unlink, type: :cli do
+RSpec.describe Dotfiler::CLI::Commands::Remove, type: :cli do
   let(:shell) { Dotfiler::Shell.new }
-  let(:command) { described_class.new(command_name: "unlink", shell: shell) }
+  let(:command) { described_class.new(command_name: "remove", shell: shell) }
   let(:file) { test_path("foo") }
 
   before do
