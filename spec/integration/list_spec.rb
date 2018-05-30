@@ -29,13 +29,13 @@ RSpec.describe "list", type: :integration do
 
     it "lists all links" do
       expected_output = <<-EOF
-  test
-    - LINK: #{test_path("testrc")}
-    - PATH: #{dotfiles_path("testrc")}
-
   other
     - LINK: #{test_path("otherrc")}
     - PATH: #{dotfiles_path("otherrc")}
+
+  test
+    - LINK: #{test_path("testrc")}
+    - PATH: #{dotfiles_path("testrc")}
 
       EOF
 
@@ -48,7 +48,7 @@ RSpec.describe "list", type: :integration do
       let(:options) { "names" }
 
       it "lists names only" do
-        expected_output = "  test\n  other\n"
+        expected_output = "  other\n  test\n"
 
         output = Open3.capture3(command).first
 

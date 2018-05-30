@@ -25,7 +25,7 @@ RSpec.describe Dotfiler::Dotfiles do
       create_dotfile("nvim")
       create_dotfile("emacs")
 
-      expect(dotfiles.names).to eq(%w[test nvim emacs])
+      expect(dotfiles.names).to eq(%w[emacs nvim test])
     end
   end
 
@@ -58,14 +58,14 @@ RSpec.describe Dotfiler::Dotfiles do
 
       expect(dotfiles.list).to eq([
         {
-          name: "test",
-          link: test_path("test"),
-          path: dotfiles_path("test")
-        },
-        {
           name: "nvim",
           link: test_path("nvim"),
           path: dotfiles_path("nvim")
+        },
+        {
+          name: "test",
+          link: test_path("test"),
+          path: dotfiles_path("test")
         }
       ])
     end
@@ -86,14 +86,14 @@ RSpec.describe Dotfiler::Dotfiles do
 
       expect(dotfiles.list).to eq([
         {
-          name: "test",
-          link: test_path("test"),
-          path: dotfiles_path("test")
-        },
-        {
           name: "nvim",
           link: test_path("nvim"),
           path: dotfiles_path("nvim")
+        },
+        {
+          name: "test",
+          link: test_path("test"),
+          path: dotfiles_path("test")
         }
       ])
 

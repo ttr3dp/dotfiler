@@ -18,10 +18,6 @@ RSpec.describe Dotfiler::CLI::Commands::List, type: :cli do
 
   it "lists all dotfiles" do
     expected_output = <<-EOF
-  foo
-    - LINK: #{test_path("foo")}
-    - PATH: #{dotfiles_path("foo")}
-
   bar
     - LINK: #{test_path("bar")}
     - PATH: #{dotfiles_path("bar")}
@@ -29,6 +25,10 @@ RSpec.describe Dotfiler::CLI::Commands::List, type: :cli do
   baz
     - LINK: #{test_path("baz")}
     - PATH: #{dotfiles_path("baz")}
+
+  foo
+    - LINK: #{test_path("foo")}
+    - PATH: #{dotfiles_path("foo")}
 
     EOF
 
@@ -38,7 +38,7 @@ RSpec.describe Dotfiler::CLI::Commands::List, type: :cli do
   end
 
   it "lists names only" do
-    expected_output = "  foo\n  bar\n  baz\n"
+    expected_output = "  bar\n  baz\n  foo\n"
 
     expect(shell).to receive(:print).with(expected_output)
 

@@ -28,7 +28,7 @@ module Dotfiler
     end
 
     def names
-      @dotfiles.map(&:name).sort
+      @dotfiles.map(&:name)
     end
 
     def name_taken?(name)
@@ -75,7 +75,7 @@ module Dotfiler
     private
 
     def parse(lines)
-      lines.each_with_object([]) do |line, result|
+      lines.sort.each_with_object([]) do |line, result|
         sanitized_line = line.gsub("\n", "")
 
         next if sanitized_line.empty?
