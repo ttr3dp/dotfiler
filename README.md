@@ -57,14 +57,14 @@ Example:
 
 ### Creating new dotfile
 
-To add a file/directory to your dotfiles, use `link` command.
+To add a file/directory to your dotfiles, use `add` command.
 
-    $ dotfiler link --help
+    $ dotfiler add --help
     Command:
-      dotfiler link
+      dotfiler add
 
     Usage:
-      dotfiler link NAME PATH
+      dotfiler add NAME PATH
 
     Description:
       Add specified file/directory to dotfiles
@@ -79,7 +79,7 @@ To add a file/directory to your dotfiles, use `link` command.
 
 Example:
 
-    $ dotfiler link zsh ~/.zshrc
+    $ dotfiler add zsh ~/.zshrc
     #  Moving /Users/aleksandar/.zshrc to dotfiles directory (/Users/aleksandar/code/my_dotfiles)...
     #  Symlinking dotfile (/Users/aleksandar/code/my_dotfiles/.zshrc) to /Users/aleksandar/.zshrc...
     #  Adding zsh to dotfiles...

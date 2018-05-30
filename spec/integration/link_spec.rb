@@ -4,10 +4,10 @@ require "spec_helper"
 
 require "support/shared/examples/initialization_guard_examples"
 
-RSpec.describe "link", type: :integration do
+RSpec.describe "add", type: :integration do
   let(:name) { "test" }
   let(:file) { test_path("testrc") }
-  let(:command_name) { "link" }
+  let(:command_name) { "add" }
   let(:command) { "#{bin_path} #{command_name} #{name} #{file} #{options}" }
 
   include_context "integration"
@@ -67,7 +67,7 @@ RSpec.describe "link", type: :integration do
     end
 
     context "aliases" do
-      let(:command_name) { "ln" }
+      let(:command_name) { "a" }
 
       it "works" do
         execute

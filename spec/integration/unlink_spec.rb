@@ -18,7 +18,7 @@ RSpec.describe "unlink", type: :integration do
     before do
       `#{bin_path} init #{dotfiles_path}`
       create_file(file)
-      `#{bin_path} link #{name} #{file}`
+      `#{bin_path} add #{name} #{file}`
     end
 
     specify "output" do

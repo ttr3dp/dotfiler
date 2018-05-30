@@ -2,9 +2,9 @@ require "spec_helper"
 
 require "support/shared/examples/cli_error_handler_example"
 
-RSpec.describe Dotfiler::CLI::Commands::Link, type: :cli do
+RSpec.describe Dotfiler::CLI::Commands::Add, type: :cli do
   let(:shell) { Dotfiler::Shell.new }
-  let(:command) { described_class.new(command_name: "link", shell: shell) }
+  let(:command) { described_class.new(command_name: "add", shell: shell) }
   let(:name) { "foo" }
   let(:file) { test_path(name) }
   let(:path) { file }

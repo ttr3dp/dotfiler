@@ -10,7 +10,7 @@ RSpec.describe Dotfiler::CLI::Commands::Unlink, type: :cli do
   before do
     initial_setup
     create_file("foo")
-    Dotfiler::CLI::Commands::Link.new(command_name: "link").call(name: "foo", path: file)
+    Dotfiler::CLI::Commands::Add.new(command_name: "add").call(name: "foo", path: file)
     command.call(name: "foo")
   end
 

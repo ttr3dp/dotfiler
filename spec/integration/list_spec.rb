@@ -23,7 +23,7 @@ RSpec.describe "list", type: :integration do
       `#{bin_path} init #{dotfiles_path}`
       dotfiles.each do |dotfile|
         create_file(dotfile[:file])
-        `#{bin_path} link #{dotfile[:name]} #{dotfile[:file]}`
+        `#{bin_path} add #{dotfile[:name]} #{dotfile[:file]}`
       end
     end
 

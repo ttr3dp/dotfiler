@@ -1,7 +1,7 @@
 module Dotfiler
   module CLI
     module Commands
-      class Link < Command
+      class Add < Command
         include Dotfiler::Import["dotfiles", "symlinker", "mover"]
 
         desc "Add specified file/directory to dotfiles"
