@@ -7,7 +7,7 @@ Dotfiler is a CLI gem for managing dotfiles.
 * [**Installation**](#installation)
 * [**Usage**](#usage)
     * [Initial setup](#initial-setup)
-    * [Creating new dotfile](#creating-new-dotfile)
+    * [Adding new dotfile](#adding-new-dotfile)
     * [Listing managed dotfiles](#listing-managed-dotfiles)
     * [Removing existing dotfile](#removing-existing-dotfile)
     * [Editing dotfiles](#editing-dotfiles)
