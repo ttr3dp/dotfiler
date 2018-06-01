@@ -30,7 +30,7 @@ RSpec.describe "backup", type: :integration do
       expect(execute).to include("Backing up dotfiles directory (#{dotfiles_path}) to #{test_path(".dotfiler_backup_")}")
 
       backup_dir = Dir.glob(test_path(".dotfiler_backup_*")).first
-      expect(Dir.entries(backup_dir)).to eq([".", "..", ".dotfiles", "testrc", "otherrc"])
+      expect(Dir.entries(backup_dir)).to match_array([".", "..", ".dotfiles", "otherrc"])
     end
   end
 end
