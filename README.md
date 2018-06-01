@@ -13,6 +13,7 @@ Dotfiler is a CLI gem for managing dotfiles.
     * [Editing dotfiles](#editing-dotfiles)
     * [Installing dotfiles](#installing-dotfiles)
     * [Backing up existing dotfiles](#backing-up-existing-dotfiles)
+    * [Help](#help)
     * [Checking the version](#checking-the-version)
 * [**Code of Conduct**](#code-of-conduct)
 * [**License**](#license)
@@ -268,6 +269,14 @@ Example:
 
     $ dotfiler backup
     #  Backing up dotfiles directory (/Users/aleksandar/code/my_dotfiles) to Users/aleksandar/.dotfiler_backup_2018-29-05-10-00-00
+
+### Help
+
+To see what commands are available, use `help` command:
+
+    $ dotfiler help
+
+Aliases: `-h, --help`
 
 ### Checking the version
 
