@@ -1,4 +1,4 @@
-# Dotfiler
+# Dotfiler [![Gem Version](https://badge.fury.io/rb/dotfiler.svg)](https://badge.fury.io/rb/dotfiler)
 
 Dotfiler is a CLI gem for managing dotfiles.
 
