@@ -142,6 +142,11 @@ Example:
       - PATH: /Users/aleksandar/code/my_dotfiles/.zshrc
 
 
+    # to list dotfiles names only
+
+    $ dotfiler list names
+
+
 Aliases: `ls`
 
 ### Removing existing dotfile
