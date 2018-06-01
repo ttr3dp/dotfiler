@@ -1,6 +1,6 @@
 language: ruby
 
-sudo: required
+sudo: false
 
 rvm:
   - 2.3
