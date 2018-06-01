@@ -26,6 +26,8 @@ To install Dotfiler, run:
 
     $ gem install dotfiler
 
+Dotfiler works Linux and MacOS only.
+
 ## Usage
 
 ### Initial setup
