@@ -294,7 +294,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/aradun
 
 ## Code of Conduct
 
-Everyone interacting in the Dotfiler project’s codebases and issue trackers is expected to follow the [code of conduct](https://github.com/aradunovic/dotfiler/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the Dotfiler project’s codebases and issue trackers is expected to follow the [code of conduct](https://github.com/ttr3dp/dotfiler/blob/master/CODE_OF_CONDUCT.md).
 
 ## License
 
